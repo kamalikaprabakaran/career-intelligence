@@ -44,6 +44,38 @@
       </form>
       <div id="result"></div>
     </div>
+
+    <!-- My Skills Section, hidden by default until a user is created -->
+    <div id="skills-section" class="card" style="display: none;">
+      <div class="skills-header">
+        <h2 style="margin: 0;">My Skills</h2>
+        <button type="button" id="toggle-skill-form-btn">+ Add Skill</button>
+      </div>
+
+      <!-- Skill Entry Form, hidden by default -->
+      <form id="skill-form" style="display: none; margin-top: 16px;">
+        <label for="skill_name">Skill Name</label>
+        <input type="text" id="skill_name" required placeholder="e.g. Python" />
+
+        <label for="proficiency">Proficiency</label>
+        <select id="proficiency" required>
+          <option value="Beginner">Beginner</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Advanced">Advanced</option>
+        </select>
+
+        <label for="years_experience">Years of Experience</label>
+        <input type="number" id="years_experience" min="0" step="0.1" required placeholder="e.g. 2" />
+
+        <button type="submit" id="add-skill-submit-btn">Add Skill</button>
+      </form>
+
+      <div id="skill-result"></div>
+
+      <ul id="skills-list" style="list-style: none; padding-left: 0; margin-top: 16px;">
+        <!-- Dynamically populated -->
+      </ul>
+    </div>
   </div>
 
   <script src="js/app.js"></script>

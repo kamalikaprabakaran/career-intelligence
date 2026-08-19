@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Career Intelligence — Recommendations</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+    <div class="page">
+        <div class="nav-container">
+            <a href="index.html" class="nav-back">&larr; Back to Dashboard</a>
+        </div>
+
+        <header>
+            <h1>Job Recommendations</h1>
+            <p>Find matching roles based on your verified skills</p>
+        </header>
+
+        <div class="card">
+            <h2>Select User Profile</h2>
+            <label for="user-select">Choose a user to view personalized job recommendations:</label>
+            <select id="user-select">
+                <option value="" disabled selected>Loading users...</option>
+            </select>
+        </div>
+
+        <div id="recommendations-section" style="display: none;">
+            <h2 style="margin-top: 32px; font-size: 1.2rem;">Matched Recommendations</h2>
+            <div id="recommendations-container">
+                <!-- Recommendations will be loaded dynamically here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/recommendations.js"></script>
+</body>
+
+</html>

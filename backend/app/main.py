@@ -9,6 +9,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.api import users
 from app.api import skills
+from app.api import jobs
+from app.api import matching
+from app.api import recommendations
 
 app = FastAPI(
     title="AI-Powered Skill Gap Analysis & Fair Job Recommendation System",
@@ -28,6 +31,9 @@ app.add_middleware(
 # Register routers - as we build Phase 3+, new routers get added here
 app.include_router(users.router)
 app.include_router(skills.router)
+app.include_router(jobs.router)
+app.include_router(matching.router)
+app.include_router(recommendations.router)
 
 
 @app.get("/")

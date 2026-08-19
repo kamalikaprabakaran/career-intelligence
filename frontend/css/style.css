@@ -220,3 +220,149 @@ select:focus {
   border: 1px solid var(--error);
   color: var(--error);
 }
+
+/* Recommendations styling */
+.nav-container {
+  margin-bottom: 24px;
+}
+
+.nav-back {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.nav-back:hover {
+  opacity: 0.8;
+}
+
+.recommendation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.job-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+
+.company-name {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.match-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.badge-green {
+  background: rgba(52, 199, 123, 0.1);
+  border: 1px solid var(--success);
+  color: var(--success);
+}
+
+.badge-yellow {
+  background: rgba(255, 167, 38, 0.1);
+  border: 1px solid #ffa726;
+  color: #ffa726;
+}
+
+.badge-red {
+  background: rgba(255, 95, 109, 0.1);
+  border: 1px solid var(--error);
+  color: var(--error);
+}
+
+.progress-container {
+  background: var(--border);
+  border-radius: 4px;
+  height: 8px;
+  width: 100%;
+  margin: 12px 0 20px 0;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.fill-green {
+  background: var(--success);
+}
+
+.fill-yellow {
+  background: #ffa726;
+}
+
+.fill-red {
+  background: var(--error);
+}
+
+.skills-block {
+  margin-top: 14px;
+}
+
+.skills-title {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.pills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.pills-container:last-child {
+  margin-bottom: 0;
+}
+
+.pill {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.pill-matched {
+  background: rgba(52, 199, 123, 0.08);
+  border: 1px solid rgba(52, 199, 123, 0.3);
+  color: var(--success);
+}
+
+.pill-missing {
+  background: rgba(255, 95, 109, 0.08);
+  border: 1px solid rgba(255, 95, 109, 0.3);
+  color: var(--error);
+}
+
+.status-msg {
+  text-align: center;
+  color: var(--muted);
+  padding: 24px;
+  font-size: 0.95rem;
+}
+
+.status-msg.error-msg {
+  color: var(--error);
+}

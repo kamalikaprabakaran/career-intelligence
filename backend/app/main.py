@@ -12,6 +12,7 @@ from app.api import skills
 from app.api import jobs
 from app.api import matching
 from app.api import recommendations
+from app.api import resumes
 
 app = FastAPI(
     title="AI-Powered Skill Gap Analysis & Fair Job Recommendation System",
@@ -34,6 +35,7 @@ app.include_router(skills.router)
 app.include_router(jobs.router)
 app.include_router(matching.router)
 app.include_router(recommendations.router)
+app.include_router(resumes.router)
 
 
 @app.get("/")

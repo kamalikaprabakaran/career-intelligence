@@ -8,7 +8,10 @@ into user_skills, so the existing matching engine picks them up.
 import uuid
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from app.database import supabase
-from app.services.resume_parser import extract_text_from_pdf, extract_skills_from_text
+from app.services.resume_parser import (
+    extract_text_from_pdf,
+    extract_combined_skills,
+)
 
 router = APIRouter(
     prefix="/users",
@@ -34,7 +37,7 @@ async def upload_resume(user_id: str, file: UploadFile = File(...)):
     except Exception as error:
         raise HTTPException(status_code=400, detail=f"Could not read PDF: {error}")
 
-    extracted_skills = extract_skills_from_text(resume_text)
+    extracted_skills = extract_combined_skills(resume_text)
 
     # 3. Upload the file to Supabase Storage
     storage_path = f"{user_id}/{uuid.uuid4()}_{file.filename}"

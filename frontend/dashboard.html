@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard — Career Intelligence</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+    <!-- Shared Navbar is dynamically injected at top -->
+
+    <div class="page">
+        <header style="margin-bottom: 24px;">
+            <h1>Career Dashboard</h1>
+            <p>Overview of your profile strengths and job match analysis</p>
+        </header>
+
+        <!-- User Selector -->
+        <div class="card">
+            <h2>Change Active Profile</h2>
+            <label for="user-select">Choose your profile:</label>
+            <select id="user-select">
+                <option value="" disabled selected>Loading profiles...</option>
+            </select>
+        </div>
+
+        <!-- Alert shown if no profile is selected -->
+        <div id="no-profile-alert" class="user-alert">
+            <strong>No user profile selected yet!</strong> Select an existing profile above or
+            <a href="index.html">create a new one here</a>.
+        </div>
+
+        <!-- Main Dashboard content section, shown when profile is active -->
+        <div id="dashboard-content" style="display: none;">
+            <!-- Profile summary -->
+            <div class="card">
+                <h2 id="profile-name">User Profile</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
+                    <div>
+                        <label style="margin-top:0;">Target Role</label>
+                        <div id="profile-role" style="font-weight:600;">-</div>
+                    </div>
+                    <div>
+                        <label style="margin-top:0;">Education</label>
+                        <div id="profile-edu" style="font-weight:600;">-</div>
+                    </div>
+                    <div>
+                        <label style="margin-top:0;">Experience</label>
+                        <div id="profile-exp" style="font-weight:600;">-</div>
+                    </div>
+                    <div>
+                        <label style="margin-top:0;">Email</label>
+                        <div id="profile-email" style="font-weight:600;">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills count and parser quick link card -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="skills-count">0</div>
+                    <div class="stat-label">Verified Skills</div>
+                </div>
+            </div>
+
+            <!-- Compact top 3 recommendations -->
+            <div class="card" style="margin-top: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px;">
+                    <h2 style="margin:0;">Top Job Matches</h2>
+                    <a href="recommendations.html"
+                        style="color: var(--accent); font-size: 0.85rem; text-decoration: none; font-weight: 500;">
+                        View All Recommendations &rarr;
+                    </a>
+                </div>
+
+                <div id="dashboard-recommendations-container">
+                    <!-- Compact list of 3 jobs loaded via JS -->
+                    <div class="status-msg">Loading top matches...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>

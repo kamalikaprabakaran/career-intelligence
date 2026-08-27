@@ -4,85 +4,86 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Career Intelligence — Connection Test</title>
+  <title>AI Career Intelligence — Connect & Start</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 
-<body>
-  <div class="page">
-    <header
-      style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; margin-bottom: 24px;">
-      <div>
-        <h1 style="margin: 0;">AI Career Intelligence</h1>
-        <p style="margin: 4px 0 0 0;">Phase 1 & 2 milestone: Frontend → FastAPI → Supabase</p>
-      </div>
-      <a href="recommendations.html" class="nav-back">Job Recommendations &rarr;</a>
+<body style="min-height: 100vh; display: flex; flex-direction: column;">
+  <!-- We do NOT inject top navbar on index.html, since it serves as the Welcome / Getting Started Landing screen. -->
+
+  <div class="page"
+    style="flex: 1; display: flex; flex-direction: column; justify-content: center; max-width: 500px; padding: 40px 20px;">
+
+    <!-- Hero / Intro -->
+    <header style="text-align: center; margin-bottom: 32px;">
+      <h1
+        style="font-size: 2.2rem; margin: 0 0 10px 0; background: linear-gradient(135deg, #e6e8ec 30%, #4f8cff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        AI Career Intelligence
+      </h1>
+      <p style="font-size: 1.05rem; line-height: 1.5; color: var(--muted); margin: 0;">
+        Bridge the gap between your capabilities and dream jobs using smart AI skill analysis.
+      </p>
     </header>
 
-    <div class="card">
-      <h2 id="db-status"><span class="status-dot"></span>Checking connection...</h2>
-      <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 0;">
-        This checks that your FastAPI backend is running and can reach your Supabase database.
+    <!-- Connection Indicator -->
+    <div class="card" style="padding: 16px; margin-top: 0; text-align: center;">
+      <h2 id="db-status"
+        style="font-size: 0.95rem; margin: 0; display: inline-flex; align-items: center; justify-content: center;">
+        <span class="status-dot"></span>Checking connection...
+      </h2>
+    </div>
+
+    <!-- Onboarding: Choose Existing Profile -->
+    <div class="card" id="selector-card" style="display: none; margin-top: 16px;">
+      <h2>Select Your Profile</h2>
+      <label for="user-select">Choose your existing active profile:</label>
+      <select id="user-select" style="margin-bottom: 12px;">
+        <option value="" disabled selected>Loading profiles...</option>
+      </select>
+      <button type="button" id="start-btn">Get Started &rarr;</button>
+
+      <p style="text-align: center; margin: 12px 0 0 0; font-size: 0.85rem;">
+        <span style="color: var(--muted);">New applicant?</span>
+        <a href="#" id="show-register-link" style="color: var(--accent); text-decoration: underline;">Create a
+          profile</a>
       </p>
     </div>
 
-    <div class="card">
-      <h2>Create a test user</h2>
+    <!-- Onboarding: Create Profile Form -->
+    <div class="card" id="register-card" style="margin-top: 16px;">
+      <h2>Create Your Profile</h2>
       <form id="user-form">
-        <label for="name">Name</label>
+        <label for="name">Full Name</label>
         <input type="text" id="name" required placeholder="e.g. Priya Sharma" />
 
-        <label for="email">Email</label>
+        <label for="email">Email Address</label>
         <input type="email" id="email" required placeholder="e.g. priya@example.com" />
-
-        <label for="education">Education</label>
-        <input type="text" id="education" placeholder="e.g. B.Tech Computer Science" />
 
         <label for="target_role">Target Role</label>
         <input type="text" id="target_role" placeholder="e.g. AI Engineer" />
 
-        <label for="experience">Experience</label>
-        <input type="text" id="experience" placeholder="e.g. Fresher / 1 year" />
+        <label for="education">Highest Education</label>
+        <input type="text" id="education" placeholder="e.g. B.Tech Computer Science" />
 
-        <button type="submit" id="submit-btn">Create User</button>
-      </form>
-      <div id="result"></div>
-    </div>
+        <label for="experience">Experience Level</label>
+        <input type="text" id="experience" placeholder="e.g. Fresher / 2 years" />
 
-    <!-- My Skills Section, hidden by default until a user is created -->
-    <div id="skills-section" class="card" style="display: none;">
-      <div class="skills-header">
-        <h2 style="margin: 0;">My Skills</h2>
-        <button type="button" id="toggle-skill-form-btn">+ Add Skill</button>
-      </div>
-
-      <!-- Skill Entry Form, hidden by default -->
-      <form id="skill-form" style="display: none; margin-top: 16px;">
-        <label for="skill_name">Skill Name</label>
-        <input type="text" id="skill_name" required placeholder="e.g. Python" />
-
-        <label for="proficiency">Proficiency</label>
-        <select id="proficiency" required>
-          <option value="Beginner">Beginner</option>
-          <option value="Intermediate">Intermediate</option>
-          <option value="Advanced">Advanced</option>
-        </select>
-
-        <label for="years_experience">Years of Experience</label>
-        <input type="number" id="years_experience" min="0" step="0.1" required placeholder="e.g. 2" />
-
-        <button type="submit" id="add-skill-submit-btn">Add Skill</button>
+        <button type="submit" id="submit-btn">Create & Get Started</button>
       </form>
 
-      <div id="skill-result"></div>
+      <div id="result" class="status-msg" style="margin-top: 14px; border-radius: 6px;"></div>
 
-      <ul id="skills-list" style="list-style: none; padding-left: 0; margin-top: 16px;">
-        <!-- Dynamically populated -->
-      </ul>
+      <p style="text-align: center; margin: 16px 0 0 0; font-size: 0.85rem;">
+        <span style="color: var(--muted);">Already registered?</span>
+        <a href="#" id="show-select-link" style="color: var(--accent); text-decoration: underline;">Select existing
+          profile</a>
+      </p>
     </div>
+
   </div>
 
-  <script src="js/app.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/landing.js"></script>
 </body>
 
 </html>

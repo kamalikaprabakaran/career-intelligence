@@ -1,68 +1,50 @@
-const API_BASE_URL = "http://127.0.0.1:8000";
+// Recommendations-specific logic
 
-const userSelectEl = document.getElementById("user-select");
+const noProfileAlertEl = document.getElementById("no-profile-alert");
 const recommendationsSectionEl = document.getElementById("recommendations-section");
 const recommendationsContainerEl = document.getElementById("recommendations-container");
 
-// Helpers
-function escapeHtml(str) {
-    if (!str) return "";
-    return str
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-// Fetch users and populate select dropdown
-async function loadUsers() {
-    try {
-        const res = await fetch(`${API_BASE_URL}/users`);
-        if (!res.ok) {
-            throw new Error(`Failed to load users: ${res.statusText}`);
-        }
-        const users = await res.json();
-
-        // Clear select
-        userSelectEl.innerHTML = '<option value="" disabled selected>Select a user...</option>';
-
-        if (users.length === 0) {
-            userSelectEl.innerHTML = '<option value="" disabled>No users available. Create one first!</option>';
-            return;
-        }
-
-        users.forEach(user => {
-            const option = document.createElement("option");
-            option.value = user.id;
-            option.textContent = `${user.name} (${user.email})`;
-            userSelectEl.appendChild(option);
-        });
-    } catch (err) {
-        console.error(err);
-        userSelectEl.innerHTML = '<option value="" disabled>Error loading users</option>';
+// Listen for global user selection change from navigation.js
+window.addEventListener("userSelectionChanged", (e) => {
+    const userId = e.detail.userId;
+    if (!userId) {
+        showNoProfile();
+    } else {
+        loadRecommendations(userId);
     }
+});
+
+function showNoProfile() {
+    noProfileAlertEl.style.display = "block";
+    recommendationsSectionEl.style.display = "none";
 }
 
 // Fetch recommendations for selected user and render
 async function loadRecommendations(userId) {
+    noProfileAlertEl.style.display = "none";
     recommendationsSectionEl.style.display = "block";
-    recommendationsContainerEl.innerHTML = '<div class="status-msg">Loading recommendations...</div>';
+    recommendationsContainerEl.innerHTML = '<div class="spinner"></div>';
 
     try {
-        const res = await fetch(`${API_BASE_URL}/recommendations/${userId}`);
+        const res = await fetch(`${window.API_BASE_URL}/recommendations/${userId}`);
         if (!res.ok) {
             throw new Error(`Failed to load recommendations: ${res.statusText}`);
         }
         const data = await res.json();
         const recommendations = data.recommendations || [];
 
+        recommendationsContainerEl.innerHTML = "";
+
         if (recommendations.length === 0) {
-            recommendationsContainerEl.innerHTML = '<div class="status-msg">No recommendations yet.</div>';
+            recommendationsContainerEl.innerHTML = `
+        <div class="status-msg">
+          No job matches found for your current skills.<br>
+          <a href="profile.html" style="color: var(--accent); text-decoration: underline;">Add skills</a> 
+          or <a href="resume.html" style="color: var(--accent); text-decoration: underline;">upload a resume</a> to see recommendations.
+        </div>
+      `;
             return;
         }
-
-        recommendationsContainerEl.innerHTML = "";
 
         recommendations.forEach(rec => {
             const card = document.createElement("div");
@@ -78,19 +60,19 @@ async function loadRecommendations(userId) {
 
             // Generate matched skills pills
             const matchedPills = rec.matched_skills.map(s =>
-                `<span class="pill pill-matched">${escapeHtml(s)}</span>`
+                `<span class="pill pill-matched">${window.escapeHtml(s)}</span>`
             ).join("");
 
             // Generate missing skills pills
             const missingPills = rec.missing_skills.map(s =>
-                `<span class="pill pill-missing">${escapeHtml(s)}</span>`
+                `<span class="pill pill-missing">${window.escapeHtml(s)}</span>`
             ).join("");
 
             card.innerHTML = `
         <div class="recommendation-header">
           <div>
-            <h3 class="job-title">${escapeHtml(rec.job_title)}</h3>
-            <p class="company-name">${escapeHtml(rec.company || "Unknown Company")}</p>
+            <h3 class="job-title">${window.escapeHtml(rec.job_title)}</h3>
+            <p class="company-name">${window.escapeHtml(rec.company || "Unknown Company")}</p>
           </div>
           <span class="match-badge badge-${matchClass}">${pct}% Match</span>
         </div>
@@ -117,17 +99,6 @@ async function loadRecommendations(userId) {
         });
     } catch (err) {
         console.error(err);
-        recommendationsContainerEl.innerHTML = `<div class="status-msg error-msg">Failed to load recommendations. Request failed: ${escapeHtml(err.message)}</div>`;
+        recommendationsContainerEl.innerHTML = `<div class="status-msg error-msg">Failed to load recommendations. Request failed: ${window.escapeHtml(err.message)}</div>`;
     }
 }
-
-// Event Listeners
-userSelectEl.addEventListener("change", (e) => {
-    const userId = e.target.value;
-    if (userId) {
-        loadRecommendations(userId);
-    }
-});
-
-// Initialization
-loadUsers();

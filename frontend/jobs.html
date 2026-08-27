@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jobs — Career Intelligence</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+    <!-- Shared Navbar is dynamically injected at top -->
+
+    <div class="page">
+        <header style="margin-bottom: 24px;">
+            <h1>Explore Job Openings</h1>
+            <p>Browse available roles or publish a new job opportunity for testing</p>
+        </header>
+
+        <!-- Collapsible Publish Job Section -->
+        <div class="card">
+            <div class="collapsible-header" id="publish-trigger">
+                <h2 style="margin: 0; font-size: 1.15rem;">Post a New Job (Demo Mode)</h2>
+                <span class="arrow-icon" id="publish-arrow">&rarr;</span>
+            </div>
+
+            <div class="collapsible-content collapsed" id="publish-content" style="margin-top: 0; padding-top: 0;">
+                <hr style="border: 0; border-top: 1px solid var(--border); margin: 16px 0;" />
+
+                <!-- Job Creation Form -->
+                <form id="job-form">
+                    <label for="job_title">Job Title</label>
+                    <input type="text" id="job_title" required placeholder="e.g. Lead Frontend Developer" />
+
+                    <label for="company">Company Name</label>
+                    <input type="text" id="company" required placeholder="e.g. Acme Corp" />
+
+                    <label for="location">Location</label>
+                    <input type="text" id="location" placeholder="e.g. Remote / Bangalore" />
+
+                    <label for="job_experience">Experience Required</label>
+                    <input type="text" id="job_experience" placeholder="e.g. 3+ years" />
+
+                    <button type="submit" id="create-job-btn">Publish Job Opening</button>
+                </form>
+
+                <div id="job-result" class="status-msg" style="display: none; border-radius: 6px; margin-top: 16px;">
+                </div>
+
+                <!-- Add Skills to Job Form (appears after job is successfully created) -->
+                <div id="job-skills-subform-section"
+                    style="display: none; margin-top: 20px; padding: 16px; border: 1px dashed var(--border); border-radius: 6px; background: rgba(255,255,255,0.01);">
+                    <h3 style="margin-top: 0; font-size: 1rem;">Add Required Skills to <span
+                            id="target-created-job-title" style="color: var(--accent);"></span></h3>
+                    <p style="font-size: 0.8rem; color: var(--muted); margin-bottom: 12px;">Add skills one by one to
+                        configure job match requirements.</p>
+
+                    <form id="job-skills-form">
+                        <label for="job_skill_name">Required Skill</label>
+                        <input type="text" id="job_skill_name" required placeholder="e.g. React" />
+
+                        <label for="importance">Importance Level</label>
+                        <select id="importance">
+                            <option value="Required">Required</option>
+                            <option value="Preferred">Preferred</option>
+                        </select>
+
+                        <button type="submit" id="add-job-skill-btn"
+                            style="background: transparent; border: 1px solid var(--accent); color: var(--accent);">
+                            Add Skill
+                        </button>
+                    </form>
+
+                    <!-- Dynamic list of skills added during the current session -->
+                    <div style="margin-top: 16px;">
+                        <p style="font-size:0.85rem; font-weight: 600; margin-bottom: 6px;">Configured Skills:</p>
+                        <div id="job-configured-skills" class="pills-container" style="gap:6px;">
+                            <!-- Pills go here -->
+                        </div>
+                    </div>
+
+                    <button type="button" id="done-posting-btn" class="btn-secondary" style="width: 100%;">Done Posting
+                        Job</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Jobs Section -->
+        <div style="margin-top: 32px;">
+            <h2>Available Openings</h2>
+            <div id="jobs-list-container">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/jobs.js"></script>
+</body>
+
+</html>

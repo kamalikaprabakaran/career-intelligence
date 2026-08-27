@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Resume — Career Intelligence</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+    <!-- Shared Navbar is dynamically injected at top -->
+
+    <div class="page">
+        <header style="margin-bottom: 24px;">
+            <h1>Resume Skills Extractor</h1>
+            <p>Upload your PDF resume to automatically parse and import skills</p>
+        </header>
+
+        <!-- User Selector -->
+        <div class="card">
+            <h2>Select Profile</h2>
+            <label for="user-select">Choose your active profile:</label>
+            <select id="user-select">
+                <option value="" disabled selected>Loading profiles...</option>
+            </select>
+        </div>
+
+        <!-- Alert shown if no profile is selected -->
+        <div id="no-profile-alert" class="user-alert">
+            <strong>No user profile selected yet!</strong> Select an existing profile above or
+            <a href="index.html">create a new one here</a>.
+        </div>
+
+        <!-- Main Resume content -->
+        <div id="resume-content" style="display: none;">
+            <div class="card">
+                <h2>Upload PDF Resume</h2>
+                <form id="resume-form">
+                    <!-- Visual dropzone -->
+                    <div class="upload-zone" id="drop-zone">
+                        <span class="upload-icon">📄</span>
+                        <p style="margin: 0; font-size: 0.95rem;">Drag & drop your PDF here or click to browse</p>
+                        <p style="margin: 6px 0 0 0; font-size: 0.8rem; color: var(--muted);">Only .pdf files are
+                            accepted</p>
+                        <input type="file" id="resume-file" accept="application/pdf" required />
+                    </div>
+
+                    <div class="file-info" id="file-info">
+                        Selected: <span id="file-name" style="font-weight: 600;"></span>
+                    </div>
+
+                    <button type="submit" id="upload-btn" class="btn" style="margin-top: 16px;">Extract Skills</button>
+                </form>
+            </div>
+
+            <!-- Parsing status loader -->
+            <div id="parse-loader" style="display: none; text-align: center; margin-top: 24px;">
+                <div class="spinner"></div>
+                <p style="color: var(--muted); font-size: 0.9rem;">Extracting skills from your resume. Please wait...
+                </p>
+            </div>
+
+            <div id="upload-err-msg" class="status-msg error-msg" style="display: none;"></div>
+
+            <!-- Extracted Skills results display -->
+            <div id="extraction-result-section" class="card" style="display: none;">
+                <h2>Extracted Skills</h2>
+                <p style="font-size:0.85rem; color: var(--muted); margin-bottom: 16px;">
+                    The following skills were successfully extracted from your resume. Add them to your core skill
+                    database to enable job matching.
+                </p>
+                <div class="pills-container" id="extracted-skills-container"
+                    style="border: 1px solid var(--border); padding: 12px; border-radius: 6px; background: rgba(255, 255, 255, 0.01); display: flex; flex-wrap: wrap; gap: 8px;">
+                    <!-- Styled pills populated dynamically -->
+                </div>
+
+                <button type="button" id="apply-skills-btn" style="margin-top: 18px;">Add these skills to my
+                    profile</button>
+                <div id="apply-status" class="status-msg" style="display: none; margin-top: 12px; border-radius: 6px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/resume.js"></script>
+</body>
+
+</html>

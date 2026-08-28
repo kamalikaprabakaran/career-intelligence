@@ -34,6 +34,7 @@ app.include_router(users.router)
 app.include_router(skills.router)
 app.include_router(jobs.router)
 app.include_router(matching.router)
+app.include_router(matching.skill_gap_router)
 app.include_router(recommendations.router)
 app.include_router(resumes.router)
 

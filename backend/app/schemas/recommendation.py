@@ -5,6 +5,7 @@ full list returned for a user.
 
 from pydantic import BaseModel
 from typing import List
+from app.schemas.match import PrioritizedGap
 
 
 class JobRecommendation(BaseModel):
@@ -14,6 +15,7 @@ class JobRecommendation(BaseModel):
     matched_skills: List[str]
     missing_skills: List[str]
     match_percentage: float
+    prioritized_gaps: List[PrioritizedGap] = []
 
 
 class RecommendationListResponse(BaseModel):

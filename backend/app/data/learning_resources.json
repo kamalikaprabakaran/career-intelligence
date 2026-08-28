@@ -1,0 +1,129 @@
+{
+    "python": [
+        {
+            "title": "Python for Everybody Specialization",
+            "url": "https://www.coursera.org/specializations/python",
+            "type": "course"
+        },
+        {
+            "title": "Introduction to Python Programming",
+            "url": "https://www.udemy.com/course/introduction-to-python-programming/",
+            "type": "course"
+        }
+    ],
+    "sql": [
+        {
+            "title": "SQL for Data Science",
+            "url": "https://www.coursera.org/learn/sql-for-data-science",
+            "type": "course"
+        },
+        {
+            "title": "The Complete SQL Bootcamp",
+            "url": "https://www.udemy.com/course/the-complete-sql-bootcamp/",
+            "type": "course"
+        }
+    ],
+    "machine learning": [
+        {
+            "title": "Machine Learning Zoomcamp",
+            "url": "https://github.com/alexeygrigorev/mlbookcamp-code",
+            "type": "course"
+        },
+        {
+            "title": "Supervised Machine Learning: Regression and Classification",
+            "url": "https://www.coursera.org/learn/machine-learning",
+            "type": "course"
+        }
+    ],
+    "docker": [
+        {
+            "title": "Docker for Beginners",
+            "url": "https://www.docker.com/101-tutorial/",
+            "type": "course"
+        },
+        {
+            "title": "Docker and Kubernetes: The Complete Guide",
+            "url": "https://www.udemy.com/course/docker-and-kubernetes-the-complete-guide/",
+            "type": "course"
+        }
+    ],
+    "aws": [
+        {
+            "title": "AWS Cloud Practitioner Essentials",
+            "url": "https://aws.amazon.com/training/digital/aws-cloud-practitioner-essentials/",
+            "type": "course"
+        },
+        {
+            "title": "AWS Certified Solutions Architect Associate",
+            "url": "https://www.udemy.com/course/aws-certified-solutions-architect-associate-saa-c03/",
+            "type": "course"
+        }
+    ],
+    "kubernetes": [
+        {
+            "title": "Kubernetes for Beginners",
+            "url": "https://kodekloud.com/courses/kubernetes-for-beginners/",
+            "type": "course"
+        },
+        {
+            "title": "Certified Kubernetes Administrator (CKA)",
+            "url": "https://www.udemy.com/course/certified-kubernetes-administrator/",
+            "type": "course"
+        }
+    ],
+    "flutter": [
+        {
+            "title": "Flutter & Dart - The Complete Guide",
+            "url": "https://www.udemy.com/course/learn-flutter-dart-to-build-ios-android-apps/",
+            "type": "course"
+        },
+        {
+            "title": "Build Flutter Apps for iOS and Android",
+            "url": "https://codelabs.developers.google.com/codelabs/flutter-codelab-first",
+            "type": "tutorial"
+        }
+    ],
+    "dart": [
+        {
+            "title": "Dart Programming Tutorial",
+            "url": "https://dart.dev/guides",
+            "type": "documentation"
+        },
+        {
+            "title": "Dart Academy Bootcamp",
+            "url": "https://www.udemy.com/course/dart-programming/",
+            "type": "course"
+        }
+    ],
+    "firebase": [
+        {
+            "title": "Firebase Fundamentals Codelab",
+            "url": "https://firebase.google.com/codelabs/firebase-get-to-know-web",
+            "type": "tutorial"
+        },
+        {
+            "title": "FlutterFire (Firebase for Flutter)",
+            "url": "https://firebase.google.com/docs/flutter/setup",
+            "type": "documentation"
+        }
+    ],
+    "git": [
+        {
+            "title": "Git & GitHub - The Complete Git Guide",
+            "url": "https://www.udemy.com/course/git-and-github-bootcamp/",
+            "type": "course"
+        },
+        {
+            "title": "Git Branching Tutorial",
+            "url": "https://learngitbranching.js.org/",
+            "type": "tutorial"
+        }
+    ],
+    "fastapi": [
+        {
+            "title": "FastAPI Tutorial - User Guide",
+            "url": "https://fastapi.tiangolo.com/tutorial/",
+            "type": "documentation"
+        }
+    ]
+}

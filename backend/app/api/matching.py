@@ -7,7 +7,7 @@ from fastapi import APIRouter, HTTPException
 import os
 import json
 
-from app.database import supabase
+from app.database import supabase, execute_with_retry
 from app.services.matching import calculate_match
 from app.schemas.match import MatchResponse, SkillGapResponse, LearningRecommendationsResponse
 
@@ -125,36 +125,36 @@ def get_user_job_skill_gap(user_id: str, job_id: str):
     Focused skill gap analysis returning prioritized gaps (required before preferred).
     """
     # 1. Confirm user exists
-    user_response = (
+    user_query = (
         supabase
         .table("users")
         .select("id")
         .eq("id", user_id)
-        .execute()
     )
+    user_response = execute_with_retry(user_query)
     if not user_response.data:
         raise HTTPException(status_code=404, detail="User not found")
 
     # 2. Get job
-    job_response = (
+    job_query = (
         supabase
         .table("jobs")
         .select("id, title")
         .eq("id", job_id)
-        .execute()
     )
+    job_response = execute_with_retry(job_query)
     if not job_response.data:
         raise HTTPException(status_code=404, detail="Job not found")
     job = job_response.data[0]
 
     # 3. Get user's skills
-    user_skills_response = (
+    user_skills_query = (
         supabase
         .table("user_skills")
         .select("skill_name")
         .eq("user_id", user_id)
-        .execute()
     )
+    user_skills_response = execute_with_retry(user_skills_query)
     user_skills = [
         row["skill_name"]
         for row in user_skills_response.data
@@ -162,13 +162,13 @@ def get_user_job_skill_gap(user_id: str, job_id: str):
     ]
 
     # 4. Get job's skills with importance
-    job_skills_response = (
+    job_skills_query = (
         supabase
         .table("job_skills")
         .select("skill_name, importance")
         .eq("job_id", job_id)
-        .execute()
     )
+    job_skills_response = execute_with_retry(job_skills_query)
     job_skills = [
         {
             "skill_name": row["skill_name"],
@@ -189,7 +189,7 @@ def get_user_job_skill_gap(user_id: str, job_id: str):
         "user_id": user_id,
         "job_id": job_id,
         "job_title": job["title"],
-        "prioritized_gaps": match_result["prioritized_gaps"]
+        "prioritized_gaps": match_result.get("prioritized_gaps", [])
     }
 
 
@@ -199,36 +199,36 @@ def get_learning_recommendations(user_id: str, job_id: str):
     Exposes learning recommendations (courses/tutorials) mapped to missing prioritized skills.
     """
     # 1. Confirm user exists
-    user_response = (
+    user_query = (
         supabase
         .table("users")
         .select("id")
         .eq("id", user_id)
-        .execute()
     )
+    user_response = execute_with_retry(user_query)
     if not user_response.data:
         raise HTTPException(status_code=404, detail="User not found")
 
     # 2. Get job
-    job_response = (
+    job_query = (
         supabase
         .table("jobs")
         .select("id, title")
         .eq("id", job_id)
-        .execute()
     )
+    job_response = execute_with_retry(job_query)
     if not job_response.data:
         raise HTTPException(status_code=404, detail="Job not found")
     job = job_response.data[0]
 
     # 3. Get user's skills
-    user_skills_response = (
+    user_skills_query = (
         supabase
         .table("user_skills")
         .select("skill_name")
         .eq("user_id", user_id)
-        .execute()
     )
+    user_skills_response = execute_with_retry(user_skills_query)
     user_skills = [
         row["skill_name"]
         for row in user_skills_response.data
@@ -236,13 +236,13 @@ def get_learning_recommendations(user_id: str, job_id: str):
     ]
 
     # 4. Get job's skills with importance
-    job_skills_response = (
+    job_skills_query = (
         supabase
         .table("job_skills")
         .select("skill_name, importance")
         .eq("job_id", job_id)
-        .execute()
     )
+    job_skills_response = execute_with_retry(job_skills_query)
     job_skills = [
         {
             "skill_name": row["skill_name"],
@@ -258,7 +258,7 @@ def get_learning_recommendations(user_id: str, job_id: str):
         job_skills=job_skills
     )
 
-    prioritized_gaps = match_result["prioritized_gaps"]
+    prioritized_gaps = match_result.get("prioritized_gaps", [])
 
     # 6. Map gaps to resources
     recommendations = []

@@ -260,7 +260,7 @@ async function fetchSkillGaps(userId, jobId, element) {
     element.innerHTML = listHtml;
   } catch (err) {
     console.warn("Skill gaps fetch error:", err);
-    element.innerHTML = `<span style="color: var(--muted); font-size: 0.85rem;">No skill gaps information available at the moment.</span>`;
+    element.innerHTML = `<div class="status-msg error-msg" style="padding: 10px; font-size: 0.85rem; background: rgba(255, 95, 109, 0.1); border: 1px solid rgba(255, 95, 109, 0.4); border-radius: 6px; color: var(--error);">Failed to load skill gap details due to a network or server issue. Please try again.</div>`;
   }
 }
 
@@ -383,6 +383,6 @@ async function fetchLearningRecommendations(userId, jobId, element) {
     element.innerHTML = `<div class="roadmap-timeline">${stepsHtml}</div>`;
   } catch (err) {
     console.warn("Learning paths fetch error:", err);
-    element.innerHTML = `<span style="color: var(--muted); font-size: 0.85rem;">No learning recommendations available at the moment.</span>`;
+    element.innerHTML = `<div class="status-msg error-msg" style="padding: 10px; font-size: 0.85rem; background: rgba(255, 95, 109, 0.1); border: 1px solid rgba(255, 95, 109, 0.4); border-radius: 6px; color: var(--error);">Failed to load learning recommendations due to a network or server issue. Please try again.</div>`;
   }
 }

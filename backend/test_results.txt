@@ -1,0 +1,22 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-9.1.1, pluggy-1.6.0 -- D:\career-intelligence\backend\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\career-intelligence\backend
+plugins: anyio-4.14.2
+collecting ... collected 13 items
+
+test_resume_parser.py::TestExtractTextFromPdf::test_valid_pdf_returns_string PASSED [  7%]
+test_resume_parser.py::TestExtractTextFromPdf::test_invalid_bytes_raises PASSED [ 15%]
+test_resume_parser.py::TestExtractTextFromPdf::test_extracted_text_from_mocked_pdf PASSED [ 23%]
+test_resume_parser.py::TestExtractSkillsFromText::test_known_skills_are_found PASSED [ 30%]
+test_resume_parser.py::TestExtractSkillsFromText::test_unknown_skills_are_not_extracted PASSED [ 38%]
+test_resume_parser.py::TestExtractSkillsFromText::test_case_insensitive_matching PASSED [ 46%]
+test_resume_parser.py::TestExtractSkillsFromText::test_empty_text_returns_empty PASSED [ 53%]
+test_resume_parser.py::TestExtractSkillsFromText::test_result_is_sorted PASSED [ 61%]
+test_resume_parser.py::TestExtractSkillsFromText::test_word_boundary_matching PASSED [ 69%]
+test_resume_parser.py::TestExtractCombinedSkills::test_combines_dictionary_and_ai_skills PASSED [ 76%]
+test_resume_parser.py::TestExtractCombinedSkills::test_deduplication PASSED [ 84%]
+test_resume_parser.py::TestExtractCombinedSkills::test_ai_failure_falls_back_to_dictionary PASSED [ 92%]
+test_resume_parser.py::TestExtractCombinedSkills::test_result_sorted_and_cleaned PASSED [100%]
+
+============================= 13 passed in 8.26s ==============================

@@ -129,8 +129,69 @@ async function loadRecommendations(userId) {
   }
 }
 
+// Helper to return dynamic platform recommendations and tips
+function getSkillPlatformAndTip(skillName) {
+  const skill = (skillName || "").trim().toLowerCase();
+  let platform = "Coursera";
+  let tip = "Begin with a foundational course, complete custom coding labs, and build a simple portfolio project.";
+
+  if (skill.includes("python") || skill.includes("javascript") || skill.includes("ts") || skill.includes("node") || skill.includes("js")) {
+    platform = "Udemy / MDN Web Docs / freeCodeCamp";
+    tip = "Practice basic language syntax and complete simple algorithms on LeetCode/HackerRank.";
+  } else if (skill.includes("aws") || skill.includes("kubernetes") || skill.includes("docker") || skill.includes("devops") || skill.includes("terraform")) {
+    platform = "KodeKloud / AWS Skill Builder / YouTube Labs";
+    tip = "Build a local Minikube/Docker sandbox or sign up for a cloud free-tier to provision containers manually.";
+  } else if (skill.includes("machine learning") || skill.includes("ml") || skill.includes("deep learning") || skill.includes("tensorflow") || skill.includes("pytorch") || skill.includes("pandas") || skill.includes("numpy")) {
+    platform = "Kaggle / Coursera (DeepLearning.AI)";
+    tip = "Study Jupyter Notebook structures, join a beginner-level Kaggle data competition, and work on data cleaning workshops.";
+  } else if (skill.includes("sql") || skill.includes("postgres") || skill.includes("database")) {
+    platform = "Mode Analytics / LeetCode SQL / w3schools";
+    tip = "Practice writing complex queries involving joins, window functions, and subqueries on mock database datasets.";
+  } else if (skill.includes("power bi") || skill.includes("tableau") || skill.includes("excel")) {
+    platform = "Microsoft Learn / Tableau Public Tutorials";
+    tip = "Build visual dashboard reports and use Power Query to practice basic ETL data cleaning steps.";
+  } else if (skill.includes("git") || skill.includes("github")) {
+    platform = "GitHub Learning Lab / YouTube Hub";
+    tip = "Create a repository and practice branch checkouts, merging, pushing, and merge-conflict resolution.";
+  }
+
+  return { platform, tip };
+}
+
 // Dynamically populates the collapsible detailed layout
 async function loadDetailsPanel(userId, jobId, containerEl, rec) {
+  // If there are no missing skills (perfect match), render instantly and skip extra backend calls
+  if (!rec.missing_skills || rec.missing_skills.length === 0) {
+    containerEl.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            <!-- Skill Gap Details -->
+            <div>
+                <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted);">Skill Gap Details</h4>
+                <div style="color: var(--muted); font-size: 0.85rem;">🎉 No skill gaps identified. Perfect match!</div>
+            </div>
+            
+            <!-- AI Insights -->
+            <div>
+                <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted);">AI Career Insights</h4>
+                <div style="font-size: 0.85rem; line-height: 1.4; color: var(--text);">
+                    <p style="margin: 0 0 12px 0; color: var(--muted); font-style: italic;">This role is a 100% match based on your current profile.</p>
+                    <div style="margin-bottom: 10px;">
+                        <strong style="color: var(--success); display: block; margin-bottom: 4px;">Strengths:</strong>
+                        <ul style="margin: 0; padding: 0;"><li style="margin-left: 20px; list-style-type: disc;">You fully possess all requirements listed for this job.</li></ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recommended Learning -->
+            <div>
+                <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted);">Recommended Learning Paths</h4>
+                <div style="color: var(--muted); font-size: 0.85rem;">No learning recommendations needed.</div>
+            </div>
+        </div>
+    `;
+    return;
+  }
+
   containerEl.innerHTML = `
         <div style="display: flex; flex-direction: column; gap: 20px;">
             <!-- Skill Gap Details -->
@@ -198,8 +259,8 @@ async function fetchSkillGaps(userId, jobId, element) {
 
     element.innerHTML = listHtml;
   } catch (err) {
-    console.error(err);
-    element.innerHTML = `<span style="color: var(--error); font-size: 0.85rem;">Failed to load skill gaps: ${window.escapeHtml(err.message)}</span>`;
+    console.warn("Skill gaps fetch error:", err);
+    element.innerHTML = `<span style="color: var(--muted); font-size: 0.85rem;">No skill gaps information available at the moment.</span>`;
   }
 }
 
@@ -235,7 +296,7 @@ async function fetchAIInsights(userId, jobId, element, rec) {
             </div>
         `;
   } catch (err) {
-    console.error(err);
+    console.warn("AI insights load error:", err);
     const data = generateFallbackInsights(rec);
 
     const strengthsHtml = (data.strengths || []).map(s =>
@@ -286,31 +347,42 @@ async function fetchLearningRecommendations(userId, jobId, element) {
     const recommendations = data.recommendations || [];
 
     if (recommendations.length === 0) {
-      element.innerHTML = `<span style="color: var(--muted); font-size: 0.85rem;">No learning recommendations needed.</span>`;
+      element.innerHTML = `<span style="color: var(--muted); font-size: 0.85rem;">No learning recommendations available.</span>`;
       return;
     }
 
-    const html = recommendations.map(rec => {
-      const linksHtml = rec.resources.map(res =>
+    // Build visual roadmap steps layout
+    let stepsHtml = "";
+    recommendations.forEach((item, index) => {
+      const isReq = item.importance === "required";
+      const { platform, tip } = getSkillPlatformAndTip(item.skill_name);
+
+      const linksHtml = item.resources.map(res =>
         `<a href="${window.escapeHtml(res.url)}" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none; font-size: 0.8rem; display: block; margin-top: 4px; border-bottom: 1px dashed rgba(79, 140, 255, 0.2); padding-bottom: 2px;">&rarr; ${window.escapeHtml(res.title)} (${window.escapeHtml(res.type)})</a>`
       ).join("");
 
-      return `
-                <div style="margin-bottom: 12px; font-size: 0.85rem;">
-                    <div style="font-weight: 600; color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 4px; display: flex; justify-content: space-between;">
-                        <span>${window.escapeHtml(rec.skill_name.toUpperCase())}</span>
-                        <span style="font-size: 0.75rem; color: var(--muted); font-weight: normal;">Rank ${rec.priority_rank}</span>
-                    </div>
-                    <div style="padding-left: 8px; margin-top: 4px;">
-                        ${linksHtml}
-                    </div>
-                </div>
-            `;
-    }).join("");
+      stepsHtml += `
+        <div class="roadmap-step ${isReq ? 'step-required' : 'step-preferred'}">
+          <div class="roadmap-header-title">
+            <span style="font-weight: 700; color: var(--text);">Step ${index + 1}: Master ${window.escapeHtml(item.skill_name.toUpperCase())}</span>
+            <span class="pill ${isReq ? 'pill-missing' : 'pill'}" style="font-size:0.65rem; padding: 2px 6px;">${isReq ? 'REQUIRED' : 'PREFERRED'}</span>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text); font-weight: 500; margin-top: 4px;">
+            📢 Suggested Platform: <span style="color: var(--accent);">${platform}</span>
+          </div>
+          <div class="roadmap-suggestions">
+            💡 <strong>Actionable Tip:</strong> ${tip}
+          </div>
+          <div class="roadmap-resource-group">
+            ${linksHtml || '<span style="color: var(--muted); font-size: 0.75rem;">No direct course links found, search above platform.</span>'}
+          </div>
+        </div>
+      `;
+    });
 
-    element.innerHTML = html;
+    element.innerHTML = `<div class="roadmap-timeline">${stepsHtml}</div>`;
   } catch (err) {
-    console.error(err);
-    element.innerHTML = `<span style="color: var(--error); font-size: 0.85rem;">Failed to load learning paths: ${window.escapeHtml(err.message)}</span>`;
+    console.warn("Learning paths fetch error:", err);
+    element.innerHTML = `<span style="color: var(--muted); font-size: 0.85rem;">No learning recommendations available at the moment.</span>`;
   }
 }

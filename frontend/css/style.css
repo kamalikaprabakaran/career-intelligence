@@ -16,14 +16,24 @@
 body {
   margin: 0;
   font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-  background: var(--bg);
+  background: #090a0f;
   color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
 }
 
 .page {
-  max-width: 640px;
+  width: 100%;
+  max-width: 480px;
   margin: 0 auto;
-  padding: 48px 20px;
+  padding: 24px 16px 48px 16px;
+  min-height: calc(100vh - 64px);
+  background: var(--bg);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.45);
 }
 
 header h1 {
@@ -39,9 +49,16 @@ header p {
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 24px;
-  margin-top: 24px;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
 }
 
 .card h2 {
@@ -59,17 +76,19 @@ label {
 
 input {
   width: 100%;
-  padding: 10px 12px;
-  background: var(--bg);
+  padding: 12px 14px;
+  background: #12141a;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   color: var(--text);
   font-size: 0.95rem;
+  transition: all 0.2s ease;
 }
 
 input:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 1px;
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(79, 140, 255, 0.3);
 }
 
 button {
@@ -77,20 +96,26 @@ button {
   width: 100%;
   padding: 12px;
   border: none;
-  border-radius: 6px;
-  background: var(--accent);
+  border-radius: 8px;
+  background: linear-gradient(135deg, #4f8cff, #3075f2);
   color: white;
   font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
+  box-shadow: 0 4px 12px rgba(79, 140, 255, 0.25);
+  transition: all 0.2s ease;
 }
 
-button:hover {
-  filter: brightness(1.1);
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(79, 140, 255, 0.4);
+  filter: brightness(1.05);
 }
 
 button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 #result {
@@ -369,23 +394,27 @@ select:focus {
 
 /* Global Navbar Styles */
 .navbar {
+  width: 100%;
+  max-width: 480px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 1000;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .navbar-container {
-  max-width: 640px;
-  margin: 0 auto;
-  padding: 12px 20px;
+  width: 100%;
+  padding: 12px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
+  flex-wrap: nowrap;
+  gap: 8px;
 }
 
 .navbar-brand {
@@ -585,4 +614,88 @@ select:focus {
   color: var(--accent);
   text-decoration: underline;
   font-weight: 500;
+}
+
+/* Learning Roadmap Timeline Styles */
+.roadmap-timeline {
+  position: relative;
+  padding-left: 20px;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.roadmap-timeline::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--border);
+}
+
+.roadmap-step {
+  position: relative;
+}
+
+.roadmap-step::before {
+  content: "★";
+  font-size: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: -23px;
+  top: 3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 8px rgba(79, 140, 255, 0.2);
+}
+
+.roadmap-step.step-required::before {
+  content: "⚡";
+  font-size: 8px;
+  color: var(--error);
+  border-color: var(--error);
+  box-shadow: 0 0 8px rgba(255, 95, 109, 0.3);
+}
+
+.roadmap-step.step-preferred::before {
+  content: "✔";
+  font-size: 8px;
+  color: var(--muted);
+  border-color: var(--border);
+  box-shadow: none;
+}
+
+.roadmap-header-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.roadmap-suggestions {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 6px;
+  margin-bottom: 6px;
+  line-height: 1.4;
+  background: rgba(255, 255, 255, 0.015);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px dashed var(--border);
+}
+
+.roadmap-resource-group {
+  padding-left: 8px;
+  margin-top: 4px;
 }

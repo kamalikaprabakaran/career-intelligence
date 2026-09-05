@@ -35,25 +35,17 @@
         <!-- Main Dashboard content section, shown when profile is active -->
         <div id="dashboard-content" style="display: none;">
             <!-- Profile summary -->
-            <div class="card">
-                <h2 id="profile-name">User Profile</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
-                    <div>
-                        <label style="margin-top:0;">Target Role</label>
-                        <div id="profile-role" style="font-weight:600;">-</div>
-                    </div>
-                    <div>
-                        <label style="margin-top:0;">Education</label>
-                        <div id="profile-edu" style="font-weight:600;">-</div>
-                    </div>
-                    <div>
-                        <label style="margin-top:0;">Experience</label>
-                        <div id="profile-exp" style="font-weight:600;">-</div>
-                    </div>
-                    <div>
-                        <label style="margin-top:0;">Email</label>
-                        <div id="profile-email" style="font-weight:600;">-</div>
-                    </div>
+            <div class="card" style="text-align: center; padding: 24px;">
+                <h2 id="profile-name" style="margin: 0; font-size: 1.6rem; font-weight: 700; color: var(--text);">User
+                    Profile</h2>
+                <p id="profile-role"
+                    style="margin: 8px 0 0 0; font-size: 1rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                    -</p>
+                <!-- Retain education, experience, email in a hidden block to satisfy dashboard.js bindings -->
+                <div style="display: none;">
+                    <div id="profile-edu"></div>
+                    <div id="profile-exp"></div>
+                    <div id="profile-email"></div>
                 </div>
             </div>
 

@@ -31,7 +31,7 @@ async function loadRecommendations(userId) {
       const user = await userRes.json();
       const activeNameEl = document.getElementById("active-profile-name");
       if (activeNameEl) {
-        activeNameEl.textContent = `${window.escapeHtml(user.name)} · ${window.escapeHtml(user.target_role || "No Role")}`;
+        activeNameEl.textContent = `Recommendations for ${window.escapeHtml(user.name)}`;
       }
     }
 

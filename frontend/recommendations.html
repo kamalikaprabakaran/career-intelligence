@@ -11,20 +11,28 @@
 <body>
     <!-- Shared Navbar is dynamically injected at top -->
 
-    <div class="page">
+    <div class="page-container">
         <header style="margin-bottom: 24px;">
-            <h1>Job Recommendations</h1>
-            <p>Find matching roles based on your verified skills</p>
-        </header>
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <h2 id="active-profile-name" style="margin: 0 0 8px 0; font-size: 1.5rem; font-weight: 700;">Loading
+                    active profile...</h2>
+                <button
+                    onclick="document.getElementById('minimal-user-switcher').style.display='block'; this.style.display='none';"
+                    style="font-size: 0.9rem; color: var(--accent); background: none; border: none; cursor: pointer; padding: 0; text-decoration: underline;">Switch
+                    profile</button>
+            </div>
+            <p style="margin-bottom: 8px;">Find matching roles based on your verified skills.</p>
 
-        <!-- User Selector -->
-        <div class="card">
-            <h2>Select User Profile</h2>
-            <label for="user-select">Choose a user to view personalized job recommendations:</label>
-            <select id="user-select">
-                <option value="" disabled selected>Loading profiles...</option>
-            </select>
-        </div>
+            <div id="minimal-user-switcher"
+                style="display: none; margin-bottom: 24px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px dashed var(--border);">
+                <label for="user-select" style="font-size: 0.85rem; color: var(--muted); margin-right: 8px;">Select
+                    User:</label>
+                <select id="user-select"
+                    style="padding: 6px 12px; border-radius: 6px; background: var(--surface); color: var(--text); border: 1px solid var(--border); min-width: 250px;">
+                    <option value="" disabled selected>Loading profiles...</option>
+                </select>
+            </div>
+        </header>
 
         <!-- Alert shown if no profile is selected -->
         <div id="no-profile-alert" class="user-alert">
@@ -35,7 +43,7 @@
         <!-- Recommendations Section -->
         <div id="recommendations-section" style="display: none;">
             <h2 style="margin-top: 32px; font-size: 1.2rem;">Matched Recommendations</h2>
-            <div id="recommendations-container">
+            <div id="recommendations-container" class="recs-grid">
                 <!-- Recommendations will be loaded dynamically here -->
             </div>
         </div>

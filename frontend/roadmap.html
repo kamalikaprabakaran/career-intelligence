@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Roadmap - AI Career Intelligence</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .roadmap-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .roadmap-progress {
+            margin-bottom: 24px;
+        }
+
+        .roadmap-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            background: var(--surface);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        .roadmap-step::before {
+            content: '';
+            position: absolute;
+            left: 36px;
+            top: 56px;
+            bottom: -20px;
+            width: 2px;
+            background: var(--border);
+            z-index: 0;
+        }
+
+        .roadmap-step:last-child::before {
+            display: none;
+        }
+
+        .step-checkbox {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .step-checkbox.completed {
+            background: var(--success);
+            border-color: var(--success);
+            color: #111;
+        }
+
+        .step-checkbox.completed::after {
+            content: '✓';
+            font-weight: bold;
+        }
+
+        .step-content {
+            flex-grow: 1;
+        }
+
+        .step-content h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.2rem;
+            color: var(--text);
+            transition: color 0.2s;
+        }
+
+        .step-content.completed h3 {
+            text-decoration: line-through;
+            color: var(--muted);
+        }
+
+        .resources-list {
+            list-style: none;
+            padding: 0;
+            margin: 12px 0 0 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .resource-link {
+            display: inline-block;
+            background: rgba(79, 140, 255, 0.1);
+            color: var(--accent);
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(79, 140, 255, 0.2);
+            transition: background 0.2s;
+        }
+
+        .resource-link:hover {
+            background: rgba(79, 140, 255, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-container" id="roadmap-app">
+        <header style="margin-bottom: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <h2 id="active-profile-name" style="margin: 0 0 8px 0; font-size: 1.5rem; font-weight: 700;">Loading
+                    active profile...</h2>
+                <button
+                    onclick="document.getElementById('minimal-user-switcher').style.display='block'; this.style.display='none';"
+                    style="font-size: 0.9rem; color: var(--accent); background: none; border: none; cursor: pointer; padding: 0; text-decoration: underline;">Switch
+                    profile</button>
+            </div>
+            <p style="margin-bottom: 8px;">Track your progress towards bridging your skill gaps.</p>
+
+            <div id="minimal-user-switcher"
+                style="display: none; margin-bottom: 24px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px dashed var(--border);">
+                <label for="user-select" style="font-size: 0.85rem; color: var(--muted); margin-right: 8px;">Select
+                    User:</label>
+                <select id="user-select"
+                    style="padding: 6px 12px; border-radius: 6px; background: var(--surface); color: var(--text); border: 1px solid var(--border); min-width: 250px;">
+                    <option value="" disabled selected>Loading profiles...</option>
+                </select>
+                <button
+                    onclick="document.getElementById('minimal-user-switcher').style.display='none'; this.previousElementSibling.previousElementSibling.style.display='block';"
+                    style="display:none;">cancel</button>
+                <!-- minimal hack or simply rely on picking one to auto-close or just leave it open -->
+            </div>
+
+            <div id="db-status" style="display: none;"></div>
+        </header>
+
+        <section class="roadmap-progress">
+            <div id="progress-text" style="font-weight: 500; margin-bottom: 8px; color: var(--text);">Select a profile
+                to load progress...</div>
+            <div class="progress-container">
+                <div class="progress-fill" id="progress-bar-fill" style="width: 0%; background: var(--success);"></div>
+            </div>
+        </section>
+
+        <div id="roadmap-loading" style="text-align: center; padding: 40px; color: var(--muted);">Loading roadmap...
+        </div>
+        <div id="roadmap-empty" style="display: none; text-align: center; padding: 40px; color: var(--muted);">
+            No learning roadmap available. Make sure a profile is selected.
+        </div>
+
+        <div class="roadmap-container" id="roadmap-items">
+            <!-- Roadmap items will be dynamically injected -->
+        </div>
+    </div>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/roadmap.js"></script>
+</body>
+
+</html>

@@ -11,7 +11,7 @@
 <body>
     <!-- Shared Navbar is dynamically injected at top -->
 
-    <div class="page">
+    <div class="page-container">
         <header style="margin-bottom: 24px;">
             <h1>Resume Skills Extractor</h1>
             <p>Upload your PDF resume to automatically parse and import skills</p>
@@ -38,11 +38,19 @@
                 <h2>Upload PDF Resume</h2>
                 <form id="resume-form">
                     <!-- Visual dropzone -->
-                    <div class="upload-zone" id="drop-zone">
-                        <span class="upload-icon">📄</span>
-                        <p style="margin: 0; font-size: 0.95rem;">Drag & drop your PDF here or click to browse</p>
-                        <p style="margin: 6px 0 0 0; font-size: 0.8rem; color: var(--muted);">Only .pdf files are
-                            accepted</p>
+                    <div class="upload-zone" id="drop-zone"
+                        style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 180px;">
+                        <svg class="upload-icon"
+                            style="width: 48px; height: 48px; fill: var(--accent); margin-bottom: 16px;"
+                            focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                            <path
+                                d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.36 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z">
+                            </path>
+                        </svg>
+                        <p style="margin: 0; font-size: 1.05rem; font-weight: 500; color: var(--text);">Click or drag
+                            document to this area to upload</p>
+                        <p style="margin: 8px 0 0 0; font-size: 0.85rem; color: var(--muted);">Supports exclusively .pdf
+                            file formats</p>
                         <input type="file" id="resume-file" accept="application/pdf" required />
                     </div>
 

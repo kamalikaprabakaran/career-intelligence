@@ -6,7 +6,6 @@ const profileContentEl = document.getElementById("profile-content");
 // Prof details elements
 const profNameEl = document.getElementById("prof-name");
 const profRoleEl = document.getElementById("prof-role");
-const profEmailEl = document.getElementById("prof-email");
 const profEduEl = document.getElementById("prof-edu");
 const profExpEl = document.getElementById("prof-exp");
 
@@ -48,7 +47,6 @@ async function loadProfileData(userId) {
 
         profNameEl.textContent = window.escapeHtml(user.name || "Unnamed User");
         profRoleEl.textContent = window.escapeHtml(user.target_role || "Not specified");
-        profEmailEl.textContent = window.escapeHtml(user.email || "-");
         profEduEl.textContent = window.escapeHtml(user.education || "Not specified");
         profExpEl.textContent = window.escapeHtml(user.experience || "Not specified");
 
@@ -69,19 +67,19 @@ async function loadUserSkills(userId) {
             const skills = await res.json();
             skillsListEl.innerHTML = "";
             if (skills.length === 0) {
-                skillsListEl.innerHTML = `<li style="color: var(--muted); font-size: 0.9rem; list-style: none; padding: 12px 0;">No skills added yet. Add some manually or upload your resume!</li>`;
+                skillsListEl.innerHTML = `<div style="grid-column: 1 / -1; color: var(--muted); font-size: 0.9rem; padding: 12px 0;">No skills added yet. Add some manually or upload your resume!</div>`;
                 return;
             }
             skills.forEach(skill => {
-                const li = document.createElement("li");
-                li.className = "skill-item";
+                const li = document.createElement("div");
+                li.className = "skill-chip";
 
                 // Handle singular/plural years
-                const yearsStr = skill.years_experience === 1 ? "1 year" : `${skill.years_experience} years`;
+                const yearsStr = skill.years_experience === 1 ? "1 yr" : `${skill.years_experience} yrs`;
 
                 li.innerHTML = `
-          <div class="skill-name">${window.escapeHtml(skill.skill_name)}</div>
-          <div class="skill-details">${window.escapeHtml(skill.proficiency)} &bull; ${yearsStr}</div>
+          <div class="skill-name" style="font-size: 0.95rem; margin-bottom: 4px;">${window.escapeHtml(skill.skill_name)}</div>
+          <div class="skill-details" style="font-size: 0.75rem;">${window.escapeHtml(skill.proficiency)} &bull; ${yearsStr}</div>
         `;
                 skillsListEl.appendChild(li);
             });

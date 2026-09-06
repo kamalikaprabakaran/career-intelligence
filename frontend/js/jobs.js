@@ -53,20 +53,27 @@ async function loadJobs() {
             card.dataset.jobId = job.id;
 
             card.innerHTML = `
-        <div class="recommendation-header">
-          <div>
-            <h3 class="job-title">${window.escapeHtml(job.title)}</h3>
-            <p class="company-name">${window.escapeHtml(job.company || "Unknown Company")} &bull; ${window.escapeHtml(job.location || "Remote")}</p>
-          </div>
-          <div style="font-size: 0.85rem; color: var(--muted); text-align:right;">
-            <strong>Exp:</strong> ${window.escapeHtml(job.experience || "Not specified")}
-          </div>
-        </div>
-        <div class="job-skills-detail" style="display: none;" id="skills-detail-${job.id}">
-          <div class="skills-title">Required Skills</div>
-          <div class="pills-container" id="pills-container-${job.id}" style="display:flex; flex-wrap:wrap; gap:8px;">
-            <div class="spinner" style="margin: 8px 0; width:16px; height:16px; border-width:2px;"></div>
-          </div>
+        <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+            <div>
+                <h3 class="job-title" style="font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: 6px;">${window.escapeHtml(job.title)}</h3>
+                <p class="company-name" style="font-size: 0.95rem; font-weight: 500; color: var(--accent); margin-bottom: 12px;">${window.escapeHtml(job.company || "Unknown Company")}</p>
+                
+                <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; color: var(--muted); margin-bottom: 16px;">
+                    <span style="display: flex; align-items: center; gap: 6px;"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> ${window.escapeHtml(job.location || "Remote")}</span>
+                    <span style="display: flex; align-items: center; gap: 6px;"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg> ${window.escapeHtml(job.experience || "Experience not specified")}</span>
+                </div>
+            </div>
+            
+            <div style="border-top: 1px dashed var(--border); padding-top: 12px; margin-top: auto;">
+                <div style="font-size: 0.8rem; color: var(--accent); font-weight: 600; text-align: center; text-transform: uppercase;">View Requirements &rarr;</div>
+            </div>
+
+            <div class="job-skills-detail" style="display: none; padding-top: 12px; border-top: 1px solid var(--border); margin-top: 12px;" id="skills-detail-${job.id}">
+                <div class="skills-title">Required Skills</div>
+                <div class="pills-container" id="pills-container-${job.id}" style="display:flex; flex-wrap:wrap; gap:8px;">
+                    <div class="spinner" style="margin: 8px 0; width:16px; height:16px; border-width:2px;"></div>
+                </div>
+            </div>
         </div>
       `;
 

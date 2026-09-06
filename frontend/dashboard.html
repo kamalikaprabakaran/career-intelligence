@@ -11,7 +11,7 @@
 <body>
     <!-- Shared Navbar is dynamically injected at top -->
 
-    <div class="page">
+    <div class="page-container">
         <header style="margin-bottom: 24px;">
             <h1>Career Dashboard</h1>
             <p>Overview of your profile strengths and job match analysis</p>
@@ -35,12 +35,18 @@
         <!-- Main Dashboard content section, shown when profile is active -->
         <div id="dashboard-content" style="display: none;">
             <!-- Profile summary -->
-            <div class="card" style="text-align: center; padding: 24px;">
-                <h2 id="profile-name" style="margin: 0; font-size: 1.6rem; font-weight: 700; color: var(--text);">User
+            <div class="card" style="text-align: left; padding: 24px;">
+                <p
+                    style="margin: 0 0 4px 0; color: var(--muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                    Welcome Back</p>
+                <h2 id="profile-name" style="margin: 0; font-size: 1.8rem; font-weight: 700; color: var(--text);">User
                     Profile</h2>
                 <p id="profile-role"
-                    style="margin: 8px 0 0 0; font-size: 1rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
-                    -</p>
+                    style="margin: 4px 0 12px 0; font-size: 1.05rem; color: var(--accent); font-weight: 600;">-</p>
+                <p id="profile-status"
+                    style="margin: 0; font-size: 0.95rem; color: var(--muted); border-top: 1px solid var(--border); padding-top: 12px;">
+                    Review your career progress and recent job matches below.</p>
+
                 <!-- Retain education, experience, email in a hidden block to satisfy dashboard.js bindings -->
                 <div style="display: none;">
                     <div id="profile-edu"></div>
@@ -55,21 +61,71 @@
                     <div class="stat-value" id="skills-count">0</div>
                     <div class="stat-label">Verified Skills</div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="jobs-matched">0</div>
+                    <div class="stat-label">Job Matches</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avg-match">0%</div>
+                    <div class="stat-label">Avg Match</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="skill-gaps-count">0</div>
+                    <div class="stat-label">Skill Gaps</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="learning-progress">0%</div>
+                    <div class="stat-label">Roadmap</div>
+                </div>
             </div>
 
-            <!-- Compact top 3 recommendations -->
-            <div class="card" style="margin-top: 24px;">
-                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px;">
-                    <h2 style="margin:0;">Top Job Matches</h2>
-                    <a href="recommendations.html"
-                        style="color: var(--accent); font-size: 0.85rem; text-decoration: none; font-weight: 500;">
-                        View All Recommendations &rarr;
-                    </a>
+            <!-- Responsive Grid for Side-by-Side Cards on Desktop -->
+            <div class="recs-grid">
+                <!-- Compact top 3 recommendations -->
+                <div class="card" style="margin-top: 0;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px;">
+                        <h2 style="margin:0; text-transform: uppercase; font-size: 1.1rem;">Top Job Matches</h2>
+                        <a href="recommendations.html"
+                            style="color: var(--accent); font-size: 0.85rem; text-decoration: none; font-weight: 500;">
+                            View All &rarr;
+                        </a>
+                    </div>
+                    <div id="dashboard-recommendations-container">
+                        <!-- Compact list of 3 jobs loaded via JS -->
+                        <div class="status-msg">Loading top matches...</div>
+                    </div>
                 </div>
 
-                <div id="dashboard-recommendations-container">
-                    <!-- Compact list of 3 jobs loaded via JS -->
-                    <div class="status-msg">Loading top matches...</div>
+                <!-- Career Readiness section -->
+                <div class="card" style="margin-top: 0;">
+                    <h2 style="margin: 0 0 16px 0; text-transform: uppercase; font-size: 1.1rem;">Career Readiness</h2>
+                    <div id="career-readiness-container">
+                        <div class="status-msg">Loading readiness score...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Skills to Learn -->
+            <div class="card" style="margin-top: 24px;">
+                <h2 style="margin: 0 0 16px 0; font-size: 1.1rem; text-transform: uppercase;">Top Skills to Learn</h2>
+                <div id="top-skills-container" style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <div class="status-msg">Loading high priority gaps...</div>
+                </div>
+            </div>
+
+            <!-- Career Roadmap visual -->
+            <div class="card" style="margin-top: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px;">
+                    <h2 style="margin:0; font-size: 1.1rem; text-transform: uppercase;">Career Roadmap</h2>
+                    <a href="roadmap.html"
+                        style="color: var(--accent); font-size: 0.85rem; text-decoration: none; font-weight: 500;">
+                        Open Full Roadmap &rarr;
+                    </a>
+                </div>
+                <div id="dashboard-roadmap-container"
+                    style="display: flex; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.9rem;">
+                    <div class="status-msg">Loading roadmap sequence...</div>
                 </div>
             </div>
         </div>

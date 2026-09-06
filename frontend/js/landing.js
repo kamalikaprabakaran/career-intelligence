@@ -56,7 +56,7 @@ async function loadLandingUsers() {
         users.forEach(u => {
             const opt = document.createElement("option");
             opt.value = u.id;
-            opt.textContent = `${u.name} (${u.target_role || 'No Role'})`;
+            opt.textContent = `${u.name} • ${u.target_role || 'No Role'}`;
             userSelectEl.appendChild(opt);
         });
 

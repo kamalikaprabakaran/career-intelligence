@@ -43,12 +43,14 @@ function renderNavbar() {
     <nav class="navbar">
       <div class="navbar-container">
         <a href="index.html" class="navbar-brand">AI Career Intelligence</a>
-        <div class="navbar-links">
+        <button class="mobile-menu-btn" id="mobile-menu-btn">&#9776;</button>
+        <div class="navbar-links" id="navbar-links">
           <a href="dashboard.html" class="navbar-link ${currentPath === 'dashboard.html' ? 'active' : ''}" id="nav-dashboard">Dashboard</a>
           <a href="profile.html" class="navbar-link ${currentPath === 'profile.html' ? 'active' : ''}" id="nav-profile">My Profile</a>
           <a href="resume.html" class="navbar-link ${currentPath === 'resume.html' ? 'active' : ''}" id="nav-resume">Upload Resume</a>
           <a href="jobs.html" class="navbar-link ${currentPath === 'jobs.html' ? 'active' : ''}" id="nav-jobs">Jobs</a>
           <a href="recommendations.html" class="navbar-link ${currentPath === 'recommendations.html' ? 'active' : ''}" id="nav-recommendations">Recommendations</a>
+          <a href="roadmap.html" class="navbar-link ${currentPath === 'roadmap.html' ? 'active' : ''}" id="nav-roadmap">Roadmap</a>
         </div>
       </div>
     </nav>
@@ -56,6 +58,15 @@ function renderNavbar() {
 
     // Inject at the top of the body
     document.body.insertAdjacentHTML("afterbegin", navbarHtml);
+
+    // Setup mobile menu toggle
+    const mobileBtn = document.getElementById("mobile-menu-btn");
+    const navLinks = document.getElementById("navbar-links");
+    if (mobileBtn && navLinks) {
+        mobileBtn.addEventListener("click", () => {
+            navLinks.classList.toggle("show");
+        });
+    }
 }
 
 // Global user dropdown population and synchronization
@@ -90,7 +101,7 @@ async function setupUserSelector() {
         users.forEach(user => {
             const option = document.createElement("option");
             option.value = user.id;
-            option.textContent = `${user.name} (${user.target_role || 'No Role'} - ${user.email})`;
+            option.textContent = `${user.name} • ${user.target_role || 'No Role'}`;
             userSelect.appendChild(option);
         });
 

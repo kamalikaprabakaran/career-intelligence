@@ -26,6 +26,15 @@ async function loadRecommendations(userId) {
   recommendationsContainerEl.innerHTML = '<div class="spinner"></div>';
 
   try {
+    const userRes = await fetch(`${window.API_BASE_URL}/users/${userId}`);
+    if (userRes.ok) {
+      const user = await userRes.json();
+      const activeNameEl = document.getElementById("active-profile-name");
+      if (activeNameEl) {
+        activeNameEl.textContent = `${window.escapeHtml(user.name)} · ${window.escapeHtml(user.target_role || "No Role")}`;
+      }
+    }
+
     const res = await fetch(`${window.API_BASE_URL}/recommendations/${userId}`);
     if (!res.ok) {
       throw new Error(`Failed to load recommendations: ${res.statusText}`);
@@ -181,12 +190,6 @@ async function loadDetailsPanel(userId, jobId, containerEl, rec) {
                     </div>
                 </div>
             </div>
-            
-            <!-- Recommended Learning -->
-            <div>
-                <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted);">Recommended Learning Paths</h4>
-                <div style="color: var(--muted); font-size: 0.85rem;">No learning recommendations needed.</div>
-            </div>
         </div>
     `;
     return;
@@ -209,50 +212,47 @@ async function loadDetailsPanel(userId, jobId, containerEl, rec) {
                     <div class="spinner" style="margin: 10px auto; width: 16px; height: 16px; border-width: 2px;"></div>
                 </div>
             </div>
-            
-            <!-- Recommended Learning -->
-            <div>
-                <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted);">Recommended Learning Paths</h4>
-                <div id="learning-${jobId}">
-                    <div class="spinner" style="margin: 10px auto; width: 16px; height: 16px; border-width: 2px;"></div>
-                </div>
-            </div>
         </div>
     `;
 
   const skillGapEl = containerEl.querySelector(`#skill-gap-${jobId}`);
   const insightsEl = containerEl.querySelector(`#insights-${jobId}`);
-  const learningEl = containerEl.querySelector(`#learning-${jobId}`);
 
   // Call Endpoints in parallel
-  fetchSkillGaps(userId, jobId, skillGapEl);
+  fetchSkillGapsWithResources(userId, jobId, skillGapEl);
   fetchAIInsights(userId, jobId, insightsEl, rec);
-  fetchLearningRecommendations(userId, jobId, learningEl);
 }
 
-async function fetchSkillGaps(userId, jobId, element) {
+async function fetchSkillGapsWithResources(userId, jobId, element) {
   try {
-    const res = await fetch(`${window.API_BASE_URL}/skill-gap/${userId}/${jobId}`);
+    const res = await fetch(`${window.API_BASE_URL}/learning-recommendations/${userId}/${jobId}`);
     if (!res.ok) throw new Error(`Status ${res.status}`);
     const data = await res.json();
-    const gaps = data.prioritized_gaps || [];
+    const recommendations = data.recommendations || [];
 
-    if (gaps.length === 0) {
+    if (recommendations.length === 0) {
       element.innerHTML = `<span style="color: var(--muted); font-size: 0.85rem;">No skill gaps identified. Perfect match!</span>`;
       return;
     }
 
-    const listHtml = gaps.map(gap => {
+    const listHtml = recommendations.map(gap => {
       const isReq = gap.importance === "required";
       const badgeClass = isReq ? "pill-missing" : "pill";
       const style = isReq
         ? "border: 1px solid rgba(255, 95, 109, 0.4); font-weight: bold; background: rgba(255, 95, 109, 0.15); font-size: 0.7rem; padding: 2px 6px;"
         : "border: 1px solid rgba(154, 161, 174, 0.2); background: rgba(154, 161, 174, 0.05); color: var(--muted); font-size: 0.7rem; padding: 2px 6px;";
 
+      const resourcesHtml = gap.resources.map(res =>
+        `<a href="${window.escapeHtml(res.url)}" target="_blank" rel="noopener" style="color: var(--accent); font-size: 0.85rem; text-decoration: none; margin-left: 8px;">[${window.escapeHtml(res.title)}]</a>`
+      ).join(" ");
+
       return `
-                <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: rgba(255, 255, 255, 0.01); margin-bottom: 6px; font-size: 0.85rem;">
-                    <span>Rank ${gap.priority_rank}: <strong style="color: var(--text);">${window.escapeHtml(gap.skill_name)}</strong></span>
-                    <span class="pill ${badgeClass}" style="${style}">${isReq ? 'REQUIRED' : 'PREFERRED'}</span>
+                <div style="display: flex; flex-direction: column; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; background: rgba(255, 255, 255, 0.01); margin-bottom: 8px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                        <span style="font-size: 0.85rem;">Rank ${gap.priority_rank}: <strong style="color: var(--text);">${window.escapeHtml(gap.skill_name)}</strong></span>
+                        <span class="pill ${badgeClass}" style="${style}">${isReq ? 'REQUIRED' : 'PREFERRED'}</span>
+                    </div>
+                    ${gap.resources.length > 0 ? `<div style="font-size: 0.85rem; color: var(--muted);"> &rarr; Start learning: ${resourcesHtml}</div>` : ''}
                 </div>
             `;
     }).join("");
@@ -339,50 +339,4 @@ function generateFallbackInsights(rec) {
   };
 }
 
-async function fetchLearningRecommendations(userId, jobId, element) {
-  try {
-    const res = await fetch(`${window.API_BASE_URL}/learning-recommendations/${userId}/${jobId}`);
-    if (!res.ok) throw new Error(`Status ${res.status}`);
-    const data = await res.json();
-    const recommendations = data.recommendations || [];
 
-    if (recommendations.length === 0) {
-      element.innerHTML = `<span style="color: var(--muted); font-size: 0.85rem;">No learning recommendations available.</span>`;
-      return;
-    }
-
-    // Build visual roadmap steps layout
-    let stepsHtml = "";
-    recommendations.forEach((item, index) => {
-      const isReq = item.importance === "required";
-      const { platform, tip } = getSkillPlatformAndTip(item.skill_name);
-
-      const linksHtml = item.resources.map(res =>
-        `<a href="${window.escapeHtml(res.url)}" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none; font-size: 0.8rem; display: block; margin-top: 4px; border-bottom: 1px dashed rgba(79, 140, 255, 0.2); padding-bottom: 2px;">&rarr; ${window.escapeHtml(res.title)} (${window.escapeHtml(res.type)})</a>`
-      ).join("");
-
-      stepsHtml += `
-        <div class="roadmap-step ${isReq ? 'step-required' : 'step-preferred'}">
-          <div class="roadmap-header-title">
-            <span style="font-weight: 700; color: var(--text);">Step ${index + 1}: Master ${window.escapeHtml(item.skill_name.toUpperCase())}</span>
-            <span class="pill ${isReq ? 'pill-missing' : 'pill'}" style="font-size:0.65rem; padding: 2px 6px;">${isReq ? 'REQUIRED' : 'PREFERRED'}</span>
-          </div>
-          <div style="font-size: 0.8rem; color: var(--text); font-weight: 500; margin-top: 4px;">
-            📢 Suggested Platform: <span style="color: var(--accent);">${platform}</span>
-          </div>
-          <div class="roadmap-suggestions">
-            💡 <strong>Actionable Tip:</strong> ${tip}
-          </div>
-          <div class="roadmap-resource-group">
-            ${linksHtml || '<span style="color: var(--muted); font-size: 0.75rem;">No direct course links found, search above platform.</span>'}
-          </div>
-        </div>
-      `;
-    });
-
-    element.innerHTML = `<div class="roadmap-timeline">${stepsHtml}</div>`;
-  } catch (err) {
-    console.warn("Learning paths fetch error:", err);
-    element.innerHTML = `<div class="status-msg error-msg" style="padding: 10px; font-size: 0.85rem; background: rgba(255, 95, 109, 0.1); border: 1px solid rgba(255, 95, 109, 0.4); border-radius: 6px; color: var(--error);">Failed to load learning recommendations due to a network or server issue. Please try again.</div>`;
-  }
-}

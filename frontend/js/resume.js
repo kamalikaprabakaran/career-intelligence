@@ -191,6 +191,9 @@ applySkillsBtn.addEventListener("click", async () => {
             resumeFileEl.value = "";
             fileInfoEl.style.display = "none";
             fileNameEl.textContent = "";
+
+            // Dispatch global event for profile.js to reload skills
+            window.dispatchEvent(new CustomEvent('skillsUpdated'));
         } else {
             applyStatusEl.style.display = "block";
             applyStatusEl.className = "status-msg error-msg";

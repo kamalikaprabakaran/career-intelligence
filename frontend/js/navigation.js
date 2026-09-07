@@ -39,32 +39,65 @@ document.addEventListener("DOMContentLoaded", () => {
 function renderNavbar() {
     const currentPath = window.location.pathname.split("/").pop() || "index.html";
 
-    const navbarHtml = `
-    <nav class="navbar">
-      <div class="navbar-container">
-        <a href="index.html" class="navbar-brand">AI Career Intelligence</a>
-        <button class="mobile-menu-btn" id="mobile-menu-btn">&#9776;</button>
-        <div class="navbar-links" id="navbar-links">
-          <a href="dashboard.html" class="navbar-link ${currentPath === 'dashboard.html' ? 'active' : ''}" id="nav-dashboard">Dashboard</a>
-          <a href="profile.html" class="navbar-link ${currentPath === 'profile.html' ? 'active' : ''}" id="nav-profile">My Profile</a>
-          <a href="resume.html" class="navbar-link ${currentPath === 'resume.html' ? 'active' : ''}" id="nav-resume">Upload Resume</a>
-          <a href="jobs.html" class="navbar-link ${currentPath === 'jobs.html' ? 'active' : ''}" id="nav-jobs">Jobs</a>
-          <a href="recommendations.html" class="navbar-link ${currentPath === 'recommendations.html' ? 'active' : ''}" id="nav-recommendations">Recommendations</a>
-          <a href="roadmap.html" class="navbar-link ${currentPath === 'roadmap.html' ? 'active' : ''}" id="nav-roadmap">Roadmap</a>
+    const sidebarHtml = `
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
         </div>
+        <span class="sidebar-title">AI Career Intelligence</span>
+        <button class="mobile-menu-btn" id="mobile-menu-btn">&#10005;</button>
+      </div>
+      <div class="sidebar-links" id="sidebar-links">
+        <a href="dashboard.html" class="sidebar-link ${currentPath === 'dashboard.html' ? 'active' : ''}" id="nav-dashboard">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          Dashboard
+        </a>
+        <a href="profile.html" class="sidebar-link ${currentPath === 'profile.html' ? 'active' : ''}" id="nav-profile">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          My Profile
+        </a>
+        <a href="resume.html" class="sidebar-link ${currentPath === 'resume.html' ? 'active' : ''}" id="nav-resume">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+          Upload Resume
+        </a>
+        <a href="jobs.html" class="sidebar-link ${currentPath === 'jobs.html' ? 'active' : ''}" id="nav-jobs">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+          Jobs
+        </a>
+        <a href="recommendations.html" class="sidebar-link ${currentPath === 'recommendations.html' ? 'active' : ''}" id="nav-recommendations">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          Recommendations
+        </a>
+        <a href="roadmap.html" class="sidebar-link ${currentPath === 'roadmap.html' ? 'active' : ''}" id="nav-roadmap">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"></path><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"></path></svg>
+          Learning Roadmap
+        </a>
       </div>
     </nav>
+    <button class="mobile-menu-open-btn" id="mobile-menu-open-btn">&#9776;</button>
   `;
 
     // Inject at the top of the body
-    document.body.insertAdjacentHTML("afterbegin", navbarHtml);
+    document.body.insertAdjacentHTML("afterbegin", sidebarHtml);
 
     // Setup mobile menu toggle
-    const mobileBtn = document.getElementById("mobile-menu-btn");
-    const navLinks = document.getElementById("navbar-links");
-    if (mobileBtn && navLinks) {
-        mobileBtn.addEventListener("click", () => {
-            navLinks.classList.toggle("show");
+    const closeBtn = document.getElementById("mobile-menu-btn");
+    const openBtn = document.getElementById("mobile-menu-open-btn");
+    const sidebar = document.getElementById("sidebar");
+
+    if (openBtn && sidebar) {
+        openBtn.addEventListener("click", () => {
+            sidebar.classList.add("show");
+        });
+    }
+    if (closeBtn && sidebar) {
+        closeBtn.addEventListener("click", () => {
+            sidebar.classList.remove("show");
         });
     }
 }

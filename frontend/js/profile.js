@@ -4,12 +4,14 @@ const noProfileAlertEl = document.getElementById("no-profile-alert");
 const profileContentEl = document.getElementById("profile-content");
 
 // Prof details elements
+const profAvatarEl = document.getElementById("prof-avatar");
 const profNameEl = document.getElementById("prof-name");
 const profRoleEl = document.getElementById("prof-role");
 const profEduEl = document.getElementById("prof-edu");
 const profExpEl = document.getElementById("prof-exp");
 
 // Skills section elements
+const skillsCountHeaderEl = document.getElementById("skills-count-header");
 const skillsSectionEl = document.getElementById("skills-section");
 const toggleSkillFormBtn = document.getElementById("toggle-skill-form-btn");
 const skillFormEl = document.getElementById("skill-form");
@@ -29,6 +31,13 @@ window.addEventListener("userSelectionChanged", async (e) => {
     }
 });
 
+// Add listener to reload skills if resume.js finishes applying skills
+window.addEventListener("skillsUpdated", async () => {
+    if (currentUserId) {
+        await loadUserSkills(currentUserId);
+    }
+});
+
 function showNoProfile() {
     noProfileAlertEl.style.display = "block";
     profileContentEl.style.display = "none";
@@ -45,7 +54,15 @@ async function loadProfileData(userId) {
         if (!userRes.ok) throw new Error("Failed to fetch user profiles");
         const user = await userRes.json();
 
-        profNameEl.textContent = window.escapeHtml(user.name || "Unnamed User");
+        const name = user.name || "Unnamed User";
+        profNameEl.textContent = window.escapeHtml(name);
+
+        // Calculate Avatar initials
+        const parts = name.trim().split(" ");
+        let initials = parts[0] ? parts[0][0] : "";
+        if (parts.length > 1) initials += parts[parts.length - 1][0];
+        profAvatarEl.textContent = window.escapeHtml(initials.toUpperCase());
+
         profRoleEl.textContent = window.escapeHtml(user.target_role || "Not specified");
         profEduEl.textContent = window.escapeHtml(user.education || "Not specified");
         profExpEl.textContent = window.escapeHtml(user.experience || "Not specified");
@@ -67,9 +84,11 @@ async function loadUserSkills(userId) {
             const skills = await res.json();
             skillsListEl.innerHTML = "";
             if (skills.length === 0) {
+                skillsCountHeaderEl.textContent = "My Skills (0 skills)";
                 skillsListEl.innerHTML = `<div style="grid-column: 1 / -1; color: var(--muted); font-size: 0.9rem; padding: 12px 0;">No skills added yet. Add some manually or upload your resume!</div>`;
                 return;
             }
+            skillsCountHeaderEl.textContent = `My Skills (${skills.length} skills)`;
             skills.forEach(skill => {
                 const li = document.createElement("div");
                 li.className = "skill-chip";
@@ -77,9 +96,14 @@ async function loadUserSkills(userId) {
                 // Handle singular/plural years
                 const yearsStr = skill.years_experience === 1 ? "1 yr" : `${skill.years_experience} yrs`;
 
+                // Distinct color handling based on proficiency logic
+                let profColor = "var(--muted)";
+                if (skill.proficiency.toLowerCase() === "intermediate") profColor = "#34c77b";
+                if (skill.proficiency.toLowerCase() === "advanced") profColor = "var(--accent)";
+
                 li.innerHTML = `
-          <div class="skill-name" style="font-size: 0.95rem; margin-bottom: 4px;">${window.escapeHtml(skill.skill_name)}</div>
-          <div class="skill-details" style="font-size: 0.75rem;">${window.escapeHtml(skill.proficiency)} &bull; ${yearsStr}</div>
+          <div class="skill-name" style="font-size: 1rem; font-weight: 600; margin-bottom: 4px;">${window.escapeHtml(skill.skill_name)}</div>
+          <div class="skill-details" style="font-size: 0.8rem; color: ${profColor};">${window.escapeHtml(skill.proficiency)} &bull; <span style="color: var(--muted)">${yearsStr}</span></div>
         `;
                 skillsListEl.appendChild(li);
             });

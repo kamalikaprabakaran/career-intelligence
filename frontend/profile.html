@@ -34,66 +34,131 @@
 
         <!-- Main Profile details -->
         <div id="profile-content" style="display: none;">
-            <!-- Profile Information -->
-            <!-- Profile Information -->
-            <div class="card">
-                <h2 style="text-transform: uppercase; font-size: 0.95rem; letter-spacing: 0.05em; color: var(--muted);">
-                    Professional Profile</h2>
 
-                <div
-                    style="margin-top: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; align-items: start;">
-                    <div>
-                        <div style="font-size: 1.4rem; font-weight:600; color: var(--text);" id="prof-name">-</div>
-                        <p style="margin: 8px 0 0 0; font-size: 0.95rem; color: var(--muted);">Education: <span
-                                id="prof-edu" style="color: var(--text);">-</span></p>
+            <!-- 1. Header Row -->
+            <div class="card" style="display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div id="prof-avatar"
+                        style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #4f8cff, #3075f2); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: white;">
+                        --
                     </div>
                     <div>
-                        <div style="font-size: 1.1rem; color: var(--accent); font-weight: 500;" id="prof-role">-</div>
-                        <p style="margin: 8px 0 0 0; font-size: 0.95rem; color: var(--muted);">Experience: <span
-                                id="prof-exp" style="color: var(--text);">-</span></p>
+                        <div style="font-size: 1.8rem; font-weight: 700; color: var(--text);" id="prof-name">-</div>
+                        <div style="font-size: 1rem; color: var(--accent); font-weight: 500; margin-top: 4px;"
+                            id="prof-role">-</div>
+                        <div style="font-size: 0.9rem; color: var(--muted); margin-top: 4px;" id="prof-loc">Location:
+                            Not specified</div>
                     </div>
                 </div>
-
-                <!-- Email hidden, maintained for JS bindings if needed -->
-                <div id="prof-email" style="display: none;"></div>
+                <button type="button" style="width: auto; padding: 10px 20px;" class="btn-secondary">Edit
+                    Profile</button>
             </div>
 
-            <!-- User Skills List -->
+            <!-- 2. Professional Information -->
+            <div class="card">
+                <h2
+                    style="font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 16px;">
+                    Professional Information</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px;">
+                    <div>
+                        <div style="font-size: 0.85rem; color: var(--muted); text-transform: uppercase;">Education</div>
+                        <div style="font-size: 1.05rem; font-weight: 500; margin-top: 4px;" id="prof-edu">-</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.85rem; color: var(--muted); text-transform: uppercase;">Experience
+                        </div>
+                        <div style="font-size: 1.05rem; font-weight: 500; margin-top: 4px;" id="prof-exp">-</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.85rem; color: var(--muted); text-transform: uppercase;">Status</div>
+                        <div style="font-size: 1.05rem; font-weight: 500; margin-top: 4px; color: var(--success);">Open
+                            to opportunities</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. My Skills -->
             <div class="card" id="skills-section">
-                <div class="skills-header">
-                    <h2 style="margin: 0;">My Skills</h2>
+                <div class="skills-header"
+                    style="border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 16px;">
+                    <h2 style="margin: 0;" id="skills-count-header">My Skills</h2>
                     <button type="button" id="toggle-skill-form-btn">+ Add Skill</button>
                 </div>
 
                 <!-- Add Skill Form (hidden by default) -->
-                <form id="skill-form" style="display: none; margin-top: 16px;">
-                    <label for="skill_name">Skill Name</label>
-                    <input type="text" id="skill_name" required placeholder="e.g. Python" />
-
-                    <label for="proficiency">Proficiency</label>
-                    <select id="proficiency" required>
-                        <option value="Beginner">Beginner</option>
-                        <option value="Intermediate">Intermediate</option>
-                        <option value="Advanced">Advanced</option>
-                    </select>
-
-                    <label for="years_experience">Years of Experience</label>
-                    <input type="number" id="years_experience" min="0" step="0.1" required placeholder="e.g. 2" />
-
-                    <button type="submit" id="add-skill-submit-btn">Add Skill</button>
+                <form id="skill-form" style="display: none; margin-bottom: 16px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+                        <div>
+                            <label for="skill_name">Skill Name</label>
+                            <input type="text" id="skill_name" required placeholder="e.g. Python" />
+                        </div>
+                        <div>
+                            <label for="proficiency">Proficiency</label>
+                            <select id="proficiency" required>
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="years_experience">Years of Experience</label>
+                            <input type="number" id="years_experience" min="0" step="0.1" required
+                                placeholder="e.g. 2" />
+                        </div>
+                    </div>
+                    <button type="submit" id="add-skill-submit-btn" style="width: auto;">Submit Skill</button>
                 </form>
 
                 <div id="skill-result"></div>
 
-                <div id="skills-list" class="skills-grid">
+                <div id="skills-list" class="skills-grid"
+                    style="grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));">
                     <!-- Dynamically populated -->
                 </div>
             </div>
+
+            <!-- 4. Resume Upload Integration -->
+            <div class="card" id="resume-content">
+                <h2
+                    style="font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 16px;">
+                    Upload Resume</h2>
+                <p style="color: var(--muted); font-size: 0.95rem;">Upload your latest resume to automatically extract
+                    and apply skills.</p>
+
+                <form id="resume-form">
+                    <div class="upload-zone" id="drop-zone">
+                        <span class="upload-icon">📄</span>
+                        <p style="margin: 0; font-size: 1.1rem; font-weight: 500;">Drag & drop your PDF here</p>
+                        <p style="margin: 8px 0 0 0; font-size: 0.9rem; color: var(--muted);">or click to browse files
+                        </p>
+                        <input type="file" id="resume-file" accept="application/pdf" />
+                    </div>
+                    <div id="file-info" class="file-info">
+                        <strong>Selected:</strong> <span id="file-name"></span>
+                    </div>
+
+                    <button type="submit" id="upload-btn">Extract Skills from Resume</button>
+                    <div id="parse-loader" class="spinner" style="display: none;"></div>
+                    <div id="upload-err-msg" class="status-msg error-msg" style="display: none;"></div>
+                </form>
+
+                <!-- Results Section -->
+                <div id="extraction-result-section"
+                    style="display: none; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border);">
+                    <h3 style="font-size: 1rem; margin-top: 0;">Extracted Skills</h3>
+                    <div id="extracted-skills-container" class="pills-container"></div>
+                    <button type="button" id="apply-skills-btn">Add these skills to my profile</button>
+                    <div id="apply-status" class="status-msg" style="display: none; margin-top: 16px;"></div>
+                </div>
+            </div>
+
         </div>
     </div>
 
+    <!-- Need both profile.js and resume.js to handle the respective sections -->
     <script src="js/navigation.js"></script>
     <script src="js/profile.js"></script>
+    <script src="js/resume.js"></script>
 </body>
 
 </html>

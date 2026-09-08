@@ -39,8 +39,8 @@ window.addEventListener("skillsUpdated", async () => {
 });
 
 function showNoProfile() {
-    noProfileAlertEl.style.display = "block";
-    profileContentEl.style.display = "none";
+    if (noProfileAlertEl) noProfileAlertEl.style.display = "block";
+    if (profileContentEl) profileContentEl.style.display = "none";
 }
 
 async function loadProfileData(userId) {
@@ -97,13 +97,14 @@ async function loadUserSkills(userId) {
                 const yearsStr = skill.years_experience === 1 ? "1 yr" : `${skill.years_experience} yrs`;
 
                 // Distinct color handling based on proficiency logic
+                let proficiency = skill.proficiency || "Not specified";
                 let profColor = "var(--muted)";
-                if (skill.proficiency.toLowerCase() === "intermediate") profColor = "#34c77b";
-                if (skill.proficiency.toLowerCase() === "advanced") profColor = "var(--accent)";
+                if (proficiency.toLowerCase() === "intermediate") profColor = "#34c77b";
+                if (proficiency.toLowerCase() === "advanced") profColor = "var(--accent)";
 
                 li.innerHTML = `
-          <div class="skill-name" style="font-size: 1rem; font-weight: 600; margin-bottom: 4px;">${window.escapeHtml(skill.skill_name)}</div>
-          <div class="skill-details" style="font-size: 0.8rem; color: ${profColor};">${window.escapeHtml(skill.proficiency)} &bull; <span style="color: var(--muted)">${yearsStr}</span></div>
+          <div class="skill-name" style="font-size: 1rem; font-weight: 600; margin-bottom: 4px;">${window.escapeHtml(skill.skill_name || "Unknown Skill")}</div>
+          <div class="skill-details" style="font-size: 0.8rem; color: ${profColor};">${window.escapeHtml(proficiency)} &bull; <span style="color: var(--muted)">${yearsStr}</span></div>
         `;
                 skillsListEl.appendChild(li);
             });

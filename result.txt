@@ -1,0 +1,2 @@
+Status: 200
+Text: {"id":"78320bad-7388-4f32-acdf-a58d89f9d16e","user_id":"4cc9ba26-c458-4e7e-b16b-483040d02ba0","file_path":"4cc9ba26-c458-4e7e-b16b-483040d02ba0/86670d6b-6a36-4bed-9e5b-62e97d6eeedd_dummy.pdf","original_filename":"dummy.pdf","extracted_text":"Python Developer, API, SQL","extracted_skills":["python","Python Developer","SQL"],"uploaded_at":"2026-09-07T06:41:12.877069+00:00"}

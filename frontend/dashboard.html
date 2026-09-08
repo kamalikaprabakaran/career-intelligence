@@ -17,20 +17,12 @@
             <p>Overview of your profile strengths and job match analysis</p>
         </header>
 
-        <!-- User Selector -->
-        <div class="card">
-            <h2>Change Active Profile</h2>
-            <label for="user-select">Choose your profile:</label>
-            <select id="user-select">
-                <option value="" disabled selected>Loading profiles...</option>
-            </select>
+
+        <!-- Alert shown if no profile is active (e.g. after logout) -->
+        <div id="no-profile-alert" class="user-alert" style="display:none;">
+            <strong>No user profile active.</strong> Please <a href="index.html">log in again</a>.
         </div>
 
-        <!-- Alert shown if no profile is selected -->
-        <div id="no-profile-alert" class="user-alert">
-            <strong>No user profile selected yet!</strong> Select an existing profile above or
-            <a href="index.html">create a new one here</a>.
-        </div>
 
         <!-- Main Dashboard content section, shown when profile is active -->
         <div id="dashboard-content" style="display: none;">

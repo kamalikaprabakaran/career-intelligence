@@ -36,7 +36,7 @@
         <div id="resume-content" style="display: none;">
             <div class="card">
                 <h2>Upload PDF Resume</h2>
-                <form id="resume-form">
+                <form id="resume-form" onsubmit="event.preventDefault(); return false;">
                     <!-- Visual dropzone -->
                     <div class="upload-zone" id="drop-zone"
                         style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 180px;">

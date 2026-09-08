@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Error Trapper</title>
+</head>
+
+<body>
+    <h1>Trapper</h1>
+    <script>
+        window.trappedErrors = [];
+        window.addEventListener("message", (e) => {
+            if (e.data && e.data.type === "uncaughtError") {
+                console.log("TRAPPED ERROR:", e.data.msg, e.data.url, e.data.line);
+                document.body.innerHTML += `<p style="color:red">ERROR: ${e.data.msg} at ${e.data.url}:${e.data.line}</p>`;
+            }
+        });
+    </script>
+    <iframe id="testframe" src="profile.html" width="1000" height="800"></iframe>
+    <script>
+        const iframe = document.getElementById("testframe");
+        iframe.onload = () => {
+            try {
+                // inject error trapper into iframe
+                const script = iframe.contentWindow.document.createElement('script');
+                script.textContent = `
+                    window.onerror = function(msg, url, line) {
+                        window.parent.postMessage({type: 'uncaughtError', msg, url, line}, '*');
+                    };
+                `;
+                iframe.contentWindow.document.head.prepend(script);
+            } catch (e) { }
+        };
+    </script>
+</body>
+
+</html>

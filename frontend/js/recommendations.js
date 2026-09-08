@@ -48,8 +48,7 @@ async function loadRecommendations(userId) {
       recommendationsContainerEl.innerHTML = `
         <div class="status-msg">
           No job matches found for your current skills.<br>
-          <a href="profile.html" style="color: var(--accent); text-decoration: underline;">Add skills</a> 
-          or <a href="resume.html" style="color: var(--accent); text-decoration: underline;">upload a resume</a> to see recommendations.
+          <a href="profile.html" style="color: var(--accent); text-decoration: underline;">Add skills or upload your resume</a> to see recommendations.
         </div>
       `;
       return;

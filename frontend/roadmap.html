@@ -118,30 +118,22 @@
         <header style="margin-bottom: 24px;">
             <div style="display: flex; justify-content: space-between; align-items: baseline;">
                 <h2 id="active-profile-name" style="margin: 0 0 8px 0; font-size: 1.5rem; font-weight: 700;">Loading
-                    active profile...</h2>
-                <button
-                    onclick="document.getElementById('minimal-user-switcher').style.display='block'; this.style.display='none';"
-                    style="font-size: 0.9rem; color: var(--accent); background: none; border: none; cursor: pointer; padding: 0; text-decoration: underline;">Switch
-                    profile</button>
+                    roadmap...</h2>
             </div>
             <p style="margin-bottom: 8px;">Track your progress towards bridging your skill gaps.</p>
 
-            <div id="minimal-user-switcher"
-                style="display: none; margin-bottom: 24px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px dashed var(--border);">
-                <label for="user-select" style="font-size: 0.85rem; color: var(--muted); margin-right: 8px;">Select
-                    User:</label>
-                <select id="user-select"
-                    style="padding: 6px 12px; border-radius: 6px; background: var(--surface); color: var(--text); border: 1px solid var(--border); min-width: 250px;">
-                    <option value="" disabled selected>Loading profiles...</option>
-                </select>
-                <button
-                    onclick="document.getElementById('minimal-user-switcher').style.display='none'; this.previousElementSibling.previousElementSibling.style.display='block';"
-                    style="display:none;">cancel</button>
-                <!-- minimal hack or simply rely on picking one to auto-close or just leave it open -->
-            </div>
-
             <div id="db-status" style="display: none;"></div>
         </header>
+
+        <div class="card" id="custom-skill-form" style="margin-bottom: 24px; padding: 20px;">
+            <h3 style="margin: 0 0 12px 0; font-size: 1.1rem;">Add Custom Learning Goal</h3>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <input type="text" id="custom-skill-input" placeholder="e.g. Docker, AWS, GraphQL"
+                    style="flex: 1; padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
+                <button id="add-custom-skill-btn" style="width: auto;">Add to Roadmap</button>
+            </div>
+            <div id="custom-skill-error" class="status-msg error-msg" style="display: none; margin-top: 12px;"></div>
+        </div>
 
         <section class="roadmap-progress">
             <div id="progress-text" style="font-weight: 500; margin-bottom: 8px; color: var(--text);">Select a profile

@@ -1,0 +1,27 @@
+{
+  "name": "career-intelligence",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test_submit.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kamalikaprabakaran/career-intelligence.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kamalikaprabakaran/career-intelligence/issues"
+  },
+  "homepage": "https://github.com/kamalikaprabakaran/career-intelligence#readme",
+  "dependencies": {
+    "puppeteer": "^25.10.0"
+  }
+}

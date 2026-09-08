@@ -9,13 +9,10 @@ document.addEventListener("DOMContentLoaded", () => {
             clearRoadmap();
         }
     });
-
-    const currentUserId = localStorage.getItem("selectedUserId");
-    if (currentUserId) {
-        loadRoadmap(currentUserId);
-    } else {
-        clearRoadmap();
-    }
+    // NOTE: Do NOT call loadRoadmap() directly here.
+    // navigation.js fires userSelectionChanged with the stored userId (or null)
+    // after a 50ms delay, which will trigger the listener above exactly once.
+    // Calling loadRoadmap() here AND triggering via the event causes a double render.
 });
 
 function clearRoadmap() {
@@ -45,34 +42,40 @@ async function loadRoadmap(userId) {
             }
         }
 
-        const recsRes = await fetch(`${API_BASE_URL}/recommendations/${userId}?limit=1`);
-        if (!recsRes.ok) throw new Error("Failed to fetch recommendations");
-        const recsData = await recsRes.json();
-
-        if (!recsData.recommendations || recsData.recommendations.length === 0) {
-            loading.style.display = "none";
-            empty.textContent = "We couldn't find any job recommendations to build a roadmap from. Try adjusting your skills.";
-            empty.style.display = "block";
-            return;
+        let serverRecs = [];
+        try {
+            const recsRes = await fetch(`${API_BASE_URL}/recommendations/${userId}?limit=1`);
+            if (recsRes.ok) {
+                const recsData = await recsRes.json();
+                if (recsData.recommendations && recsData.recommendations.length > 0) {
+                    const topJobId = recsData.recommendations[0].job_id;
+                    const learnRes = await fetch(`${API_BASE_URL}/learning-recommendations/${userId}/${topJobId}`);
+                    if (learnRes.ok) {
+                        const learnData = await learnRes.json();
+                        serverRecs = learnData.recommendations || [];
+                    }
+                }
+            }
+        } catch (e) {
+            console.error("Could not fetch server recommendations:", e);
         }
 
-        const topJobId = recsData.recommendations[0].job_id;
-
-        const learnRes = await fetch(`${API_BASE_URL}/learning-recommendations/${userId}/${topJobId}`);
-        if (!learnRes.ok) throw new Error("Failed to fetch learning recommendations");
-        const learnData = await learnRes.json();
-
-        const recommendations = learnData.recommendations || [];
+        const customRecs = getCustomSkills(userId);
+        const combined = [...serverRecs, ...customRecs];
 
         loading.style.display = "none";
 
-        if (recommendations.length === 0) {
-            empty.textContent = "Great news! You have no critical missing skills for your top targeted job.";
+        // Show form since they have a profile loaded
+        const customForm = document.getElementById("custom-skill-form");
+        if (customForm) customForm.style.display = "block";
+
+        if (combined.length === 0) {
+            empty.textContent = "No job recommendations or roadmap steps available. Add a custom skill to get started!";
             empty.style.display = "block";
             return;
         }
 
-        renderRoadmapItems(userId, recommendations);
+        renderRoadmapItems(userId, combined);
 
     } catch (err) {
         console.error(err);
@@ -128,11 +131,13 @@ function renderRoadmapItems(userId, recommendations) {
                </h3>
                <span class="status-indicator" style="font-size: 1.5rem; color: ${isCompleted ? 'var(--success)' : 'var(--muted)'};">${indicator}</span>
             </div>
-            <p style="margin:0 0 16px 0; font-size: 0.95rem; color: var(--muted);">Priority: <span style="font-weight: 500; color: ${rec.importance === 'required' ? 'var(--error)' : 'var(--accent)'};">${rec.importance === 'required' ? 'High' : 'Medium'}</span></p>
+            <p style="margin:0 0 16px 0; font-size: 0.95rem; color: var(--muted);">${rec.is_custom ?
+                `<span style="color: var(--accent); font-weight: 500;">Custom Learning Goal:</span> ${escapeHtml(rec.rationale || "Added manually to your sequence.")}` :
+                `Priority: <span style="font-weight: 500; color: ${rec.importance === 'required' ? 'var(--error)' : 'var(--accent)'};">${rec.importance === 'required' ? 'High' : 'Medium'}</span>`}</p>
             
             <h4 style="margin: 0 0 8px 0; font-size: 0.95rem;">Resources</h4>
             <ul class="resources-list" style="list-style-type: none; padding: 0; margin-bottom: 24px;">
-                ${rec.resources.map(res => `
+                ${(rec.resources || []).map(res => `
                     <li style="margin-bottom: 8px;"><a href="${escapeHtml(res.url)}" target="_blank" style="color: var(--accent); text-decoration: none;">[ ${escapeHtml(res.title)} ]</a></li>
                 `).join('')}
             </ul>
@@ -172,6 +177,30 @@ function renderRoadmapItems(userId, recommendations) {
         });
 
         stepDiv.appendChild(actionBtn);
+
+        if (rec.is_custom) {
+            const removeBtn = document.createElement("button");
+            removeBtn.style.marginTop = "0";
+            removeBtn.style.marginLeft = "12px";
+            removeBtn.style.width = "auto";
+            removeBtn.textContent = "Remove";
+            removeBtn.style.background = "rgba(255, 95, 109, 0.1)";
+            removeBtn.style.color = "var(--error)";
+            removeBtn.style.border = "1px solid rgba(255, 95, 109, 0.2)";
+            removeBtn.style.boxShadow = "none";
+
+            removeBtn.addEventListener("click", () => {
+                removeCustomSkill(userId, rec.skill_name);
+                // clean up completed status if existed
+                if (progressState[rec.skill_name]) {
+                    delete progressState[rec.skill_name];
+                    saveProgress(userId, progressState);
+                }
+                loadRoadmap(userId);
+            });
+            stepDiv.appendChild(removeBtn);
+        }
+
         container.appendChild(stepDiv);
     });
 
@@ -192,3 +221,89 @@ function updateProgress(completedCount, totalCount) {
     textEl.textContent = `${completedCount} of ${totalCount} skills learned (${percentage}%)`;
     fillEl.style.width = `${percentage}%`;
 }
+
+// Custom Skills logic
+function getCustomSkills(userId) {
+    try {
+        return JSON.parse(localStorage.getItem(`roadmap_custom_skills_${userId}`)) || [];
+    } catch {
+        return [];
+    }
+}
+
+function saveCustomSkills(userId, skills) {
+    localStorage.setItem(`roadmap_custom_skills_${userId}`, JSON.stringify(skills));
+}
+
+function addCustomSkill(userId, skillName) {
+    const skills = getCustomSkills(userId);
+    if (!skills.some(s => (s.skill_name || "").toLowerCase() === (skillName || "").toLowerCase())) {
+        skills.push({
+            skill_name: skillName.trim(),
+            is_custom: true,
+            rationale: "Selected for personal roadmap expansion based on current market trends.",
+            resources: getSimulatedResources(skillName)
+        });
+        saveCustomSkills(userId, skills);
+    }
+}
+
+function removeCustomSkill(userId, skillName) {
+    let skills = getCustomSkills(userId);
+    skills = skills.filter(s => s.skill_name !== skillName);
+    saveCustomSkills(userId, skills);
+}
+
+function getSimulatedResources(skillName) {
+    const nameStr = (skillName || "").toLowerCase();
+    if (nameStr.includes("aws") || nameStr.includes("cloud")) {
+        return [{ title: "AWS Skill Builder Free Tier", url: "https://explore.skillbuilder.aws/" }];
+    }
+    if (nameStr.includes("docker") || nameStr.includes("kubernetes")) {
+        return [{ title: "Docker 101 Tutorial", url: "https://www.docker.com/101-tutorial/" }];
+    }
+    if (nameStr.includes("react") || nameStr.includes("vue") || nameStr.includes("frontend")) {
+        return [{ title: "Frontend Masters Free Courses", url: "https://frontendmasters.com/courses/" }];
+    }
+    if (nameStr.includes("python") || nameStr.includes("node") || nameStr.includes("java")) {
+        return [{ title: "freeCodeCamp Backend API Challenges", url: "https://www.freecodecamp.org/" }];
+    }
+    return [{ title: `Learn ${skillName} on Coursera`, url: `https://www.coursera.org/search?query=${encodeURIComponent(skillName)}` }];
+}
+
+// Attach listener to Add Custom Skill button
+document.addEventListener("DOMContentLoaded", () => {
+    const customInput = document.getElementById("custom-skill-input");
+    const customSubmitBtn = document.getElementById("add-custom-skill-btn");
+    const customError = document.getElementById("custom-skill-error");
+
+    if (customSubmitBtn && customInput) {
+        customSubmitBtn.addEventListener("click", () => {
+            const val = customInput.value.trim();
+            const currentUserId = localStorage.getItem("selectedUserId");
+            if (!val) {
+                customError.textContent = "Please enter a skill name.";
+                customError.style.display = "block";
+                return;
+            }
+            if (!currentUserId) {
+                customError.textContent = "No user selected.";
+                customError.style.display = "block";
+                return;
+            }
+
+            customError.style.display = "none";
+            addCustomSkill(currentUserId, val);
+            customInput.value = "";
+            loadRoadmap(currentUserId);
+        });
+
+        // Also allow submitting with Enter key
+        customInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                customSubmitBtn.click();
+            }
+        });
+    }
+});

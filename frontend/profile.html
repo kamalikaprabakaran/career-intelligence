@@ -104,62 +104,25 @@
                 </div>
             </div>
 
-            <!-- 4. Resume Upload Integration -->
+            <!-- 4. Resume Upload Link -->
             <div class="card" id="resume-content">
                 <h2
                     style="font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 16px;">
-                    Upload Resume</h2>
-                <p style="color: var(--muted); font-size: 0.95rem;">Upload your latest resume to automatically extract
+                    Resume</h2>
+                <p style="color: var(--muted); font-size: 0.95rem; margin-bottom: 16px;">Upload your latest resume to
+                    automatically extract
                     and apply skills.</p>
 
-                <!-- Current Resume Display (if persists) -->
-                <div id="current-resume-display"
-                    style="display: none; padding: 16px; background: rgba(79, 140, 255, 0.05); border: 1px solid rgba(79, 140, 255, 0.2); border-radius: 8px; margin-bottom: 20px;">
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-                        <div>
-                            <p
-                                style="margin: 0; font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
-                                <span class="upload-icon" style="font-size: 1.2rem; color: var(--accent);">📄</span>
-                                Current Resume: <span id="current-resume-filename" style="color: var(--accent);"></span>
-                            </p>
-                            <p style="margin: 4px 0 0 32px; font-size: 0.85rem; color: var(--muted);">
-                                Uploaded <span id="current-resume-date"></span> &bull; <span
-                                    id="current-resume-skills-count"></span> skills extracted
-                            </p>
-                        </div>
-                        <button type="button" id="edit-resume-btn" class="btn-secondary"
-                            style="margin: 0; width: auto; font-size: 0.85rem; padding: 8px 16px;">Edit / Replace
-                            Resume</button>
-                    </div>
-                </div>
-
-                <form id="resume-form" onsubmit="event.preventDefault(); return false;">
-                    <label for="resume-file" class="upload-zone" id="drop-zone" style="display: block;">
-                        <span class="upload-icon">📄</span>
-                        <p style="margin: 0; font-size: 1.1rem; font-weight: 500;">Drag & drop your PDF here</p>
-                        <p style="margin: 8px 0 0 0; font-size: 0.9rem; color: var(--muted);">or click to browse files
-                        </p>
-                        <input type="file" id="resume-file" accept="application/pdf" />
-                    </label>
-                    <div id="file-info" class="file-info">
-                        <strong>Selected:</strong> <span id="file-name"></span>
-                    </div>
-
-                    <button type="submit" id="upload-btn">Extract Skills from Resume</button>
-                    <div id="parse-loader" class="spinner" style="display: none;"></div>
-                    <div id="upload-err-msg" class="status-msg error-msg" style="display: none;"></div>
-                </form>
-
+                <a href="upload-resume.html"
+                    style="text-decoration: none; display: inline-block; padding: 10px 20px; border-radius: 8px; background: linear-gradient(135deg, #4f8cff, #3075f2); color: white; font-weight: 600;">Go
+                    to Resume Upload</a>
             </div>
 
         </div>
     </div>
 
-    <!-- Need both profile.js and resume.js to handle the respective sections -->
     <script src="js/navigation.js"></script>
     <script src="js/profile.js"></script>
-    <script src="js/resume.js"></script>
 </body>
 
 </html>
